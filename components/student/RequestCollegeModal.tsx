@@ -10,6 +10,7 @@ interface RequestCollegeModalProps {
 export function RequestCollegeModal({ isOpen, onClose }: RequestCollegeModalProps) {
     const [collegeName, setCollegeName] = useState("");
     const [collegeLocation, setCollegeLocation] = useState("");
+    const [branch, setBranch] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
@@ -19,6 +20,7 @@ export function RequestCollegeModal({ isOpen, onClose }: RequestCollegeModalProp
         setSubmitted(false);
         setCollegeName("");
         setCollegeLocation("");
+        setBranch("");
         onClose();
     };
 
@@ -63,7 +65,8 @@ export function RequestCollegeModal({ isOpen, onClose }: RequestCollegeModalProp
                             </h3>
                             <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
                                 Your request for <span className="font-bold text-primary">{collegeName}</span> in{" "}
-                                <span className="font-bold text-slate-600 dark:text-slate-200">{collegeLocation}</span> has been sent to our team.
+                                <span className="font-bold text-slate-600 dark:text-slate-200">{collegeLocation}</span>{" "}
+                                for <span className="font-bold text-primary">{branch || "any branch"}</span> has been sent to our team.
                                 We&apos;ll reach out via email once mentors from this college are onboarded.
                             </p>
                         </div>
@@ -101,6 +104,20 @@ export function RequestCollegeModal({ isOpen, onClose }: RequestCollegeModalProp
                                 value={collegeLocation}
                                 onChange={(e) => setCollegeLocation(e.target.value)}
                                 placeholder="e.g. Mumbai, Maharashtra"
+                                className="w-full h-11 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium text-slate-900 dark:text-white"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
+                                Branch / Major
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                value={branch}
+                                onChange={(e) => setBranch(e.target.value)}
+                                placeholder="e.g. Computer Science"
                                 className="w-full h-11 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium text-slate-900 dark:text-white"
                             />
                         </div>
