@@ -1,10 +1,11 @@
 "use client";
 
 import { createClient } from "@/lib/supabase";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser, useAuth, useClerk } from "@clerk/nextjs";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { deleteCurrentUser } from "@/app/actions/user";
 
 
 const LANGUAGE_OPTIONS = [
@@ -79,6 +80,7 @@ function SectionTitle({ icon, children }: { icon: string; children: React.ReactN
 export default function ProfilePage() {
     const { user, isLoaded } = useUser();
     const { getToken } = useAuth();
+    const { signOut } = useClerk();
     const router = useRouter();
     const [profile, setProfile] = useState<ConsultantProfile | null>(null);
     const [sessionCount, setSessionCount] = useState(0);
@@ -364,7 +366,8 @@ export default function ProfilePage() {
                 }
             }
 
-            await user.delete();
+            await deleteCurrentUser();
+            await signOut();
             router.push("/");
         } catch (err) {
             console.error("Failed to delete account:", err);
@@ -584,7 +587,7 @@ export default function ProfilePage() {
                                     {profile.hourly_rate > 0 && <span className="text-base font-medium text-slate-400 ml-1">/hr</span>}
                                 </p>
                                 <p className="text-xs text-slate-500 mt-1">
-                                    {profile.hourly_rate > 0 ? "Charged per hour of session time" : "You&apos;re currently offering free sessions"}
+                                    {profile.hourly_rate > 0 ? "Charged per hour of session time" : "Set a rate above to start charging for sessions"}
                                 </p>
                             </div>
                             <button onClick={openEditModal} className="px-4 py-2 text-sm font-bold text-primary border border-primary/30 rounded-xl hover:bg-primary/5 transition-colors">
