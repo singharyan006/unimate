@@ -42,6 +42,22 @@ export default function Home() {
         }
     };
 
+    const handleFindMentors = () => {
+        if (!isSignedIn) {
+            router.push('/sign-in');
+            return;
+        }
+
+        const role = user?.unsafeMetadata?.role as string;
+        if (!role) {
+            router.push('/onboarding');
+        } else if (role === 'student') {
+            router.push('/dashboard/consultants');
+        } else if (role === 'consultant') {
+            router.push('/consultant/network');
+        }
+    };
+
     return (
         <>
             {/* Navigation */}
@@ -59,7 +75,7 @@ export default function Home() {
                     </Link>
                     <div className="hidden md:flex items-center gap-8 font-semibold text-slate-600 dark:text-slate-300">
                         <button
-                            onClick={handleSmartLogin}
+                            onClick={handleFindMentors}
                             className="hover:text-primary transition-colors bg-transparent border-none cursor-pointer"
                         >
                             Find Mentors
@@ -102,7 +118,7 @@ export default function Home() {
                                 campus and major.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <Button size="lg" className="hover:scale-105 shadow-xl shadow-primary/30" onClick={handleSmartLogin}>
+                                <Button size="lg" className="hover:scale-105 shadow-xl shadow-primary/30" onClick={handleFindMentors}>
                                     Browse Mentors
                                     <span className="material-icons-outlined ml-2">arrow_forward</span>
                                 </Button>
@@ -392,8 +408,8 @@ export default function Home() {
                                     college path with UniMate.
                                 </p>
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                    <Button variant="secondary" size="xl" asChild>
-                                        <Link href="/dashboard">Find My Mentor</Link>
+                                    <Button variant="secondary" size="xl" onClick={handleFindMentors}>
+                                        Find My Mentor
                                     </Button>
                                     <Button
                                         size="xl"
