@@ -201,9 +201,7 @@ export default function StudentDashboard() {
         "IITs",
         "NITs",
         "BITS",
-        "Delhi University",
-        "Engineering",
-        "Medical"
+        "Delhi University"
     ];
 
     return (

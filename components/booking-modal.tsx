@@ -8,7 +8,7 @@ import { format, addDays, setHours, setMinutes } from "date-fns";
 interface BookingModalProps {
     consultant: {
         id: string;
-        hourly_rate: number;
+        hourly_rate: number | null;
         profiles?: { full_name: string | null } | null;
     };
     onClose: () => void;
@@ -132,7 +132,7 @@ export function BookingModal({ consultant, onClose, onSuccess }: BookingModalPro
                             <div>
                                 <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Total</p>
                                 <p className="text-xl font-black text-primary">
-                                    {consultant.hourly_rate > 0 ? `₹${consultant.hourly_rate}` : "Free"}
+                                    {(consultant.hourly_rate ?? 0) > 0 ? `₹${consultant.hourly_rate}` : "Free"}
                                 </p>
                             </div>           </div>
                         <button
