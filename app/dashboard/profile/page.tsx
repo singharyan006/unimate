@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { deleteCurrentUser } from "@/app/actions/user";
 
 interface StudentProfile {
     id: string;
@@ -261,8 +262,9 @@ export default function StudentProfilePage() {
                 }
             }
 
-            // Finally, delete the Clerk user object automatically signing them out
-            await user.delete();
+            // Finally, delete the Clerk user object from backend and sign them out of the frontend
+            await deleteCurrentUser();
+            await signOut();
 
             // Next.js redirect gracefully
             router.push("/");
