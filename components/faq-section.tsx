@@ -34,6 +34,18 @@ const FAQS = {
         {
             question: "Why should we trust a student’s opinion for such an important decision?",
             answer: "Because students are the ones living the reality right now. They experience the academics, campus life, hostels, placements, and pressure firsthand — information that brochures and rankings often don’t show."
+        },
+        {
+            question: "How do you verify the students who are mentoring?",
+            answer: "All mentors on UniMate are verified as currently enrolled students in their respective colleges. We cross-check their college and branch details before onboarding. Anonymous or unverified profiles are not allowed on the platform."
+        },
+        {
+            question: "What if the guidance given turns out to be misleading or biased?",
+            answer: "UniMate provides first-hand student perspectives, not promotional advice. We encourage families to use these conversations as one input alongside official information and their own research. Our goal is clarity, not influence."
+        },
+        {
+            question: "How is this different from speaking to a college counsellor or educational consultant?",
+            answer: "Traditional counsellors provide structured, data-driven guidance across institutions.\n\nUniMate adds a complementary layer — direct, experience-based insights from current students who are actively living that college journey.\n\nIt combines informed guidance with real on-ground perspective."
         }
     ]
 };
