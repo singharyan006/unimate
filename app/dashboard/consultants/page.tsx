@@ -8,8 +8,9 @@ import { useUser, useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { BookingModal } from "@/components/booking-modal";
 import { SuccessModal } from "@/components/success-modal";
+import { ConsultantDetailsModal } from "@/components/consultant-details-modal";
 
-const FILTERS = ["All", "IITs", "NITs", "BITS", "Delhi University", "Admissions", "Placements", "Coding", "JEE", "NEET"];
+const FILTERS = ["All", "IITs", "NITs", "BITS", "Delhi University"];
 const FALLBACK_AVATAR = "https://api.dicebear.com/9.x/notionists/svg?seed=Felix&backgroundColor=e0f2fe";
 
 interface Consultant {
@@ -22,9 +23,13 @@ interface Consultant {
     major: string | null;
     rating: number | null;
     review_count: number | null;
-    hourly_rate: number;
     bio: string | null;
     specializations: string[] | null;
+    github_url: string | null;
+    linkedin_url: string | null;
+    college_email: string | null;
+    hourly_rate: number | null;
+    graduation_year: string | null;
 }
 
 export default function AllConsultantsPage() {
@@ -37,6 +42,7 @@ export default function AllConsultantsPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedFilter, setSelectedFilter] = useState("All");
     const [selectedConsultant, setSelectedConsultant] = useState<Consultant | null>(null);
+    const [selectedConsultantDetails, setSelectedConsultantDetails] = useState<Consultant | null>(null);
     const [showSuccess, setShowSuccess] = useState<Consultant | null>(null);
 
     // Role check
@@ -57,12 +63,12 @@ export default function AllConsultantsPage() {
             const { data, error } = await supabase
                 .from("consultants")
                 .select(`
-                    *,
+                    id, university, major, rating, review_count, bio, specializations, github_url, linkedin_url, college_email, hourly_rate, graduation_year,
                     profiles:profiles!consultants_id_fkey (full_name, avatar_url)
                 `);
 
             if (error) throw error;
-            setConsultants(data || []);
+            setConsultants((data || []) as unknown as Consultant[]);
         };
 
         try {
@@ -216,7 +222,11 @@ export default function AllConsultantsPage() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filtered.map((consultant) => (
-                            <div key={consultant.id} className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1">
+                            <div
+                                key={consultant.id}
+                                onClick={() => setSelectedConsultantDetails(consultant)}
+                                className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer"
+                            >
                                 <div
                                     className="relative h-52 w-full bg-center bg-cover"
                                     style={{ backgroundImage: `url('${consultant.profiles?.avatar_url || FALLBACK_AVATAR}')` }}
@@ -260,7 +270,10 @@ export default function AllConsultantsPage() {
                                     )}
 
                                     <button
-                                        onClick={() => setSelectedConsultant(consultant)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedConsultant(consultant);
+                                        }}
                                         className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold py-2.5 px-4 rounded-xl transition-all text-sm border border-primary/5"
                                     >
                                         Book Session
@@ -273,6 +286,17 @@ export default function AllConsultantsPage() {
             </main>
 
             {/* Modals */}
+            {selectedConsultantDetails && (
+                <ConsultantDetailsModal
+                    consultant={selectedConsultantDetails}
+                    onClose={() => setSelectedConsultantDetails(null)}
+                    onBook={() => {
+                        setSelectedConsultantDetails(null);
+                        setSelectedConsultant(selectedConsultantDetails);
+                    }}
+                />
+            )}
+
             {selectedConsultant && (
                 <BookingModal
                     consultant={selectedConsultant}
