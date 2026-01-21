@@ -1,4 +1,4 @@
-# 🎓 Student–Consultant Counseling Platform
+# 🎓 Unimate (Student–Consultant Counseling Platform)
 
 A web-based platform that connects **high school students** with **verified college consultants** (focused on private colleges) through **short, structured 1:1 video sessions**, helping students make informed decisions about their higher education journey.
 
