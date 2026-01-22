@@ -78,6 +78,7 @@ Feedback
 - 1:1 video meetings  
 - Post-meeting feedback  
 - Basic admin verification  
+- **Transactional Emails (Booking confirmations)**
 
 ### ❌ Explicitly NOT Included
 
@@ -95,19 +96,21 @@ Feedback
 - Next.js (App Router)  
 - TypeScript  
 - Tailwind CSS  
+- **date-fns-tz** (Timezone management)
 
 ### Backend
 - Next.js Route Handlers  
 - Prisma ORM  
+- **Resend** (Transactional Emails)
 
-### Database
-- Supabase  
+### Database & Storage
+- Supabase (Postgres DB + Storage for images/docs)
 
 ### Authentication
 - Clerk (role-based auth)  
 
 ### Video Meetings
-- Daily.co / Agora (TBD)  
+- **Daily.co** (1:1 Video Calls)
 
 ### Hosting
 - Vercel (App)  
