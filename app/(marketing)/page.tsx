@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { MainNav } from "@/components/main-nav"
 import Link from "next/link"
-import { Search, MapPin, GraduationCap, Star } from "lucide-react"
+import { Search, MapPin, GraduationCap, Star, Calendar, Video } from "lucide-react"
 
 export default function LandingPage() {
   return (
@@ -50,6 +50,65 @@ export default function LandingPage() {
 
         {/* Abstract Background Element */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/5 rounded-full blur-3xl -z-10" />
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-24 bg-background">
+        <div className="container px-4 md:px-6 mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+              Get clarity on your college choice in <span className="text-primary">three easy steps</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Talk 1:1 with verified college consultants and make confident decisions about your future, without confusion or guesswork.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 relative max-w-6xl mx-auto">
+            {/* Step 1 */}
+            <div className="relative group">
+              <div className="bg-card border rounded-2xl p-8 h-full hover:shadow-lg transition-all duration-300 relative z-10">
+                <div className="inline-block bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+                  STEP 1
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Explore Verified Consultants</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Discover experienced college consultants who understand private universities, admissions processes, and real student outcomes. Filter by college, stream, and area of expertise to find the right match for you.
+                </p>
+              </div>
+              {/* Arrow Connector (Desktop Only) */}
+              <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-px bg-border z-0"></div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative group">
+              <div className="bg-card border rounded-2xl p-8 h-full hover:shadow-lg transition-all duration-300 relative z-10">
+                <div className="inline-block bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+                  STEP 2
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Book a 1:1 session</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Choose a convenient time slot and book a focused 1:1 session. Get guidance tailored to your academic profile, career goals, and budget, not generic advice.
+                </p>
+              </div>
+              {/* Arrow Connector (Desktop Only) */}
+              <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-px bg-border z-0"></div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative group">
+              <div className="bg-card border rounded-2xl p-8 h-full hover:shadow-lg transition-all duration-300 relative z-10">
+                <div className="inline-block bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+                  STEP 3
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Get Clear, Honest Guidance</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Join a secure video call and ask your real questions about colleges, courses, admissions, and opportunities. Leave the session with clarity, confidence, and a clear next step.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Featured Mentors Grid */}
@@ -109,9 +168,9 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-background border-t py-12">
+      <footer className="bg-background border-t py-6">
         <div className="container px-4 md:px-6 mx-auto text-center text-muted-foreground">
-          <p>&copy; 2026 Unimate. All rights reserved.</p>
+          <p>&copy; 2026 UniMate. All rights reserved.</p>
         </div>
       </footer>
     </div>
