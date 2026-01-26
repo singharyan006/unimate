@@ -50,7 +50,8 @@ export function DashboardSidebar() {
     return (
         <div className="space-y-4 py-4 flex flex-col h-full bg-secondary/30 border-r text-card-foreground">
             <div className="px-3 py-2">
-                <Link href="/dashboard" className="flex items-center pl-3 mb-14">
+                <Link href="/dashboard" className="flex items-center pl-3 mb-14 gap-2">
+                    <img src="/favicon.ico" alt="Logo" className="h-8 w-8 rounded-lg" />
                     <h1 className="text-2xl font-bold text-primary">Unimate.</h1>
                 </Link>
                 <div className="space-y-1">
