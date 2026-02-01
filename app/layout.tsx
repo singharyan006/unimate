@@ -1,44 +1,36 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google"; // Using Outfit as requested
-import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { cn } from "@/lib/utils";
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "Unimate | Student-Consultant Connection",
-  description: "Connect with verified consultants for your college journey.",
+    title: "UniMate | College Mentorship Platform",
+    description:
+        "Skip the guesswork. Connect with verified college students for 1:1 video sessions to get honest insights about your dream campus and major.",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            outfit.variable
-          )}
-        >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
-  );
+    return (
+        <html lang="en" suppressHydrationWarning className="scroll-smooth">
+            <head>
+                <link
+                    href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+                    rel="stylesheet"
+                />
+            </head>
+            <body className="font-sans antialiased transition-colors duration-300">
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="light"
+                    enableSystem={false}
+                    disableTransitionOnChange
+                >
+                    {children}
+                </ThemeProvider>
+            </body>
+        </html>
+    );
 }
