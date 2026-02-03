@@ -6,23 +6,23 @@ export default function ProfilePage() {
     return (
         <div className="flex flex-col min-h-screen bg-slate-50/50 dark:bg-slate-900/50">
             {/* Cover Image Section */}
-            <div className="h-48 w-full bg-gradient-to-r from-teal-500 to-primary relative overflow-hidden">
+            <div className="h-64 w-full bg-gradient-to-r from-teal-500 to-primary relative overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto w-full px-8 pb-12 -mt-20">
+            <div className="max-w-7xl mx-auto w-full px-8 pb-12 -mt-20 relative z-10">
                 {/* Profile Header Card */}
                 <div className="bg-white dark:bg-slate-900 rounded-2xl border border-teal-100 dark:border-slate-800 shadow-sm p-6 mb-8 relative">
-                    <div className="flex flex-col md:flex-row items-center gap-6">
-                        <div className="relative">
+                    <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
+                        <div className="relative -mt-12 md:-mt-16">
                             <div
-                                className="w-32 h-32 rounded-2xl bg-cover bg-center border-4 border-white dark:border-slate-800 shadow-lg"
+                                className="w-32 h-32 rounded-full bg-cover bg-center border-4 border-white dark:border-slate-800 shadow-lg"
                                 style={{
                                     backgroundImage:
                                         'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDw3Q3AJjM0SEzV6DJt83Sk1pQS6ao3XPN2rBJIuyuKGJjlIF5WBk_hEVQHTgbB0pcFFHR_jrIvap85yNuohYOd5G66Lcilo9twQ7iib6JQBShoI-FBzR3HKDFdWTBy3B5uCNTd4Z9s1NT3_ZCySBknpevT5PaPdJpTsEsPdAq9jSo_9O_FxQh17ERIOiNtTZJIHEjGZJAgd_fuWR3QTmA5zCWwQ3QJNpF-ebF9VjDcU-WFlJAqJejxP8UHeUwrXNfZqqYnIBAS0ig")',
                                 }}
                             ></div>
-                            <div className="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900" title="Online"></div>
+                            <div className="absolute bottom-2 right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900" title="Online"></div>
                         </div>
                         <div className="flex-1 mb-2">
                             <div className="flex items-center gap-3 mb-1">
