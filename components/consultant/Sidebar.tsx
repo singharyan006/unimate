@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 export function ConsultantSidebar() {
     const pathname = usePathname();
+    const { user } = useUser();
 
     const isActive = (path: string) => {
         return pathname === path || pathname?.startsWith(`${path}/`);
@@ -79,16 +81,15 @@ export function ConsultantSidebar() {
                     <div
                         className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-11 border-2 border-primary/20"
                         style={{
-                            backgroundImage:
-                                'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDw3Q3AJjM0SEzV6DJt83Sk1pQS6ao3XPN2rBJIuyuKGJjlIF5WBk_hEVQHTgbB0pcFFHR_jrIvap85yNuohYOd5G66Lcilo9twQ7iib6JQBShoI-FBzR3HKDFdWTBy3B5uCNTd4Z9s1NT3_ZCySBknpevT5PaPdJpTsEsPdAq9jSo_9O_FxQh17ERIOiNtTZJIHEjGZJAgd_fuWR3QTmA5zCWwQ3QJNpF-ebF9VjDcU-WFlJAqJejxP8UHeUwrXNfZqqYnIBAS0ig")',
+                            backgroundImage: `url("${user?.imageUrl || ''}")`,
                         }}
                     ></div>
                     <div className="flex flex-col overflow-hidden">
                         <h1 className="text-sm font-bold truncate text-slate-800 dark:text-white">
-                            Alex Johnson
+                            {user?.fullName || 'Consultant'}
                         </h1>
                         <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                            Senior Consultant
+                            Consultant
                         </p>
                     </div>
                 </div>
