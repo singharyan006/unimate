@@ -81,7 +81,7 @@ export default function AdminDashboard() {
                             Total Revenue
                         </p>
                         <p className="text-2xl font-bold text-slate-800 dark:text-slate-50 tracking-tight">
-                            $42,800
+                            ₹42,800
                         </p>
                     </div>
                 </div>
@@ -267,7 +267,7 @@ export default function AdminDashboard() {
                                         </div>
                                     </td>
                                     <td className="px-8 py-5 text-sm font-bold text-primary">
-                                        $3,450.00
+                                        ₹3,450.00
                                     </td>
                                     <td className="px-8 py-5 text-right">
                                         <span className="px-3 py-1.5 bg-primary/10 text-primary text-[10px] font-black rounded-lg uppercase tracking-wider">
@@ -304,7 +304,7 @@ export default function AdminDashboard() {
                                         </div>
                                     </td>
                                     <td className="px-8 py-5 text-sm font-bold text-primary">
-                                        $2,140.00
+                                        ₹2,140.00
                                     </td>
                                     <td className="px-8 py-5 text-right">
                                         <span className="px-3 py-1.5 bg-primary/10 text-primary text-[10px] font-black rounded-lg uppercase tracking-wider">
@@ -341,7 +341,7 @@ export default function AdminDashboard() {
                                         </div>
                                     </td>
                                     <td className="px-8 py-5 text-sm font-bold text-primary">
-                                        $1,890.00
+                                        ₹1,890.00
                                     </td>
                                     <td className="px-8 py-5 text-right">
                                         <span className="px-3 py-1.5 bg-orange-50 dark:bg-orange-900/20 text-orange-600 text-[10px] font-black rounded-lg uppercase tracking-wider">
