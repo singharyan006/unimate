@@ -4,9 +4,28 @@
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+    const { user, isSignedIn } = useUser();
+    const router = useRouter();
 
+    const handleSmartLogin = () => {
+        if (!isSignedIn) {
+            router.push('/sign-in');
+            return;
+        }
+
+        const role = user?.unsafeMetadata?.role as string;
+        if (!role) {
+            router.push('/onboarding');
+        } else if (role === 'student') {
+            router.push('/dashboard');
+        } else if (role === 'consultant') {
+            router.push('/consultant');
+        }
+    };
 
     return (
         <>
@@ -22,28 +41,30 @@ export default function Home() {
                         </span>
                     </div>
                     <div className="hidden md:flex items-center gap-8 font-semibold text-slate-600 dark:text-slate-300">
-                        <a
-                            className="hover:text-primary transition-colors"
-                            href="#"
+                        <button
+                            onClick={handleSmartLogin}
+                            className="hover:text-primary transition-colors bg-transparent border-none cursor-pointer"
                         >
                             Find Mentors
-                        </a>
+                        </button>
                         <a
                             className="hover:text-primary transition-colors"
                             href="#how-it-works"
                         >
                             How it works
                         </a>
-                        <a
-                            className="hover:text-primary transition-colors"
-                            href="#"
+                        <button
+                            onClick={handleSmartLogin}
+                            className="hover:text-primary transition-colors bg-transparent border-none cursor-pointer"
                         >
                             For Consultants
-                        </a>
+                        </button>
                     </div>
                     <div className="flex items-center gap-4">
                         <ModeToggle />
-                        <Button>Get Started</Button>
+                        <Button onClick={handleSmartLogin}>
+                            {isSignedIn ? "Go to Dashboard" : "Get Started"}
+                        </Button>
                     </div>
                 </div>
             </nav>
@@ -70,9 +91,9 @@ export default function Home() {
                                 campus and major.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <Button size="lg" className="hover:scale-105 shadow-xl shadow-primary/30">
+                                <Button size="lg" className="hover:scale-105 shadow-xl shadow-primary/30" onClick={handleSmartLogin}>
                                     Browse Mentors
-                                    <span className="material-icons-outlined">arrow_forward</span>
+                                    <span className="material-icons-outlined ml-2">arrow_forward</span>
                                 </Button>
                                 <Button variant="outline" size="lg" asChild>
                                     <Link href="#how-it-works">How it works</Link>
@@ -332,14 +353,15 @@ export default function Home() {
                                     college path with UniMate.
                                 </p>
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                    <Button variant="secondary" size="xl">
-                                        Find My Mentor
+                                    <Button variant="secondary" size="xl" asChild>
+                                        <Link href="/dashboard">Find My Mentor</Link>
                                     </Button>
                                     <Button
                                         size="xl"
                                         className="bg-transparent border-2 border-white/30 text-white hover:bg-white/10"
+                                        asChild
                                     >
-                                        Contact Support
+                                        <Link href="mailto:support@unimate.com">Contact Support</Link>
                                     </Button>
                                 </div>
                             </div>
@@ -391,12 +413,12 @@ export default function Home() {
                                 </h4>
                                 <ul className="space-y-2 text-slate-600 dark:text-slate-400">
                                     <li>
-                                        <a
+                                        <Link
                                             className="hover:text-primary transition-colors"
-                                            href="#"
+                                            href="/dashboard"
                                         >
                                             Find Mentors
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
                                         <a
@@ -407,12 +429,12 @@ export default function Home() {
                                         </a>
                                     </li>
                                     <li>
-                                        <a
+                                        <Link
                                             className="hover:text-primary transition-colors"
-                                            href="#"
+                                            href="/consultant"
                                         >
                                             Consultants
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
                                         <a
@@ -470,7 +492,7 @@ export default function Home() {
                                 <span className="material-icons-outlined text-xs">
                                     payments
                                 </span>{" "}
-                                USD ($)
+                                INR (₹)
                             </span>
                         </div>
                     </div>
