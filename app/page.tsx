@@ -6,6 +6,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import FAQSection from "@/components/faq-section";
 
 export default function Home() {
     const { user, isSignedIn } = useUser();
@@ -314,6 +315,8 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+
+                <FAQSection />
 
                 {/* CTA Section */}
                 <section className="py-24">
