@@ -19,13 +19,13 @@ export default function EarningsPage() {
                     </div>
                     <div className="relative z-10">
                         <p className="text-xs font-black uppercase tracking-[0.15em] opacity-80 mb-4">Total Earnings</p>
-                        <p className="text-4xl font-black">$1,240.00</p>
+                        <p className="text-4xl font-black">₹1,240.00</p>
                     </div>
                 </div>
                 <div className="bg-white dark:bg-slate-900 rounded-2xl border border-teal-100 dark:border-slate-800 p-8 flex flex-col justify-between shadow-sm h-48">
                     <div>
                         <p className="text-xs font-black uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 mb-4">Pending Payout</p>
-                        <p className="text-4xl font-black text-slate-800 dark:text-white">$340.00</p>
+                        <p className="text-4xl font-black text-slate-800 dark:text-white">₹340.00</p>
                     </div>
                     <p className="text-xs text-slate-400 font-medium">Next payout on Nov 1st</p>
                 </div>

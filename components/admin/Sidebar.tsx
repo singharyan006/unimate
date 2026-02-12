@@ -24,9 +24,7 @@ export function AdminSidebar() {
             <div className="p-6 flex flex-col h-full justify-between">
                 <div className="flex flex-col gap-8">
                     <div className="flex gap-3 items-center">
-                        <div className="bg-primary rounded-xl p-2 flex items-center justify-center shadow-md shadow-primary/20">
-                            <span className="material-icons-outlined text-white text-2xl">school</span>
-                        </div>
+                        <span className="material-icons-outlined text-primary text-3xl">school</span>
                         <div className="flex flex-col">
                             <h1 className="text-slate-800 dark:text-slate-50 text-xl font-bold leading-tight tracking-tight">
                                 UniMate
