@@ -42,7 +42,7 @@ export default function ConsultantDashboard() {
                 .from('bookings')
                 .select(`
                     *,
-                    profiles:student_id (
+                    profiles:profiles!bookings_student_id_fkey (
                         full_name,
                         avatar_url
                     )
@@ -107,10 +107,10 @@ export default function ConsultantDashboard() {
         <div className="p-8 max-w-7xl w-full mx-auto">
             <div className="mb-10">
                 <h1 className="text-4xl font-black tracking-tight text-slate-800 dark:text-white mb-2">
-                    Consultant Dashboard
+                    Welcome to UniMate, {user?.firstName || 'Consultant'}!
                 </h1>
                 <p className="text-lg text-slate-500 dark:text-slate-400">
-                    Welcome back, {user?.firstName || 'Consultant'}. You have {stats.todaySessions} sessions remaining today.
+                    You have {stats.todaySessions} sessions remaining today.
                 </p>
             </div>
             <div className="grid grid-cols-12 gap-8">
@@ -151,32 +151,6 @@ export default function ConsultantDashboard() {
                             <p className="text-slate-400">You have no sessions scheduled for now.</p>
                         </div>
                     )}
-                    <div className="flex gap-6 max-w-lg">
-                        <div className="flex grow basis-0 flex-col items-center gap-3">
-                            <div className="w-full flex h-20 items-center justify-center rounded-2xl bg-secondary dark:bg-slate-800 border border-primary/10">
-                                <p className="text-3xl font-black text-primary">00</p>
-                            </div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
-                                Hours
-                            </p>
-                        </div>
-                        <div className="flex grow basis-0 flex-col items-center gap-3">
-                            <div className="w-full flex h-20 items-center justify-center rounded-2xl bg-secondary dark:bg-slate-800 border border-primary/10">
-                                <p className="text-3xl font-black text-primary">15</p>
-                            </div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
-                                Minutes
-                            </p>
-                        </div>
-                        <div className="flex grow basis-0 flex-col items-center gap-3">
-                            <div className="w-full flex h-20 items-center justify-center rounded-2xl bg-secondary dark:bg-slate-800 border border-primary/10">
-                                <p className="text-3xl font-black text-primary">24</p>
-                            </div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
-                                Seconds
-                            </p>
-                        </div>
-                    </div>
                 </div>
 
                 {/* Stats Column */}
@@ -286,8 +260,8 @@ export default function ConsultantDashboard() {
                                             </td>
                                             <td className="px-8 py-5">
                                                 <span className={`px-3 py-1 text-[10px] font-black uppercase rounded-lg tracking-widest border ${booking.status === 'confirmed'
-                                                        ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-green-100 dark:border-green-900/30'
-                                                        : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-900/30'
+                                                    ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-green-100 dark:border-green-900/30'
+                                                    : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-900/30'
                                                     }`}>
                                                     {booking.status}
                                                 </span>
