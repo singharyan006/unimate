@@ -267,7 +267,7 @@ export default function Onboarding() {
                                         className={`w-full p-3 pl-12 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.phoneNumber ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                     />
                                 </div>
-                                {errors.phoneNumber && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.phoneNumber.message}</p>}
+                                {errors.phoneNumber && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.phoneNumber.message as string}</p>}
                             </div>
 
                             {/* Student Specific Fields */}
@@ -284,7 +284,7 @@ export default function Onboarding() {
                                                 <option key={opt} value={opt} className="dark:bg-slate-900">{opt}</option>
                                             ))}
                                         </select>
-                                        {errors.stream && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.stream.message}</p>}
+                                        {errors.stream && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.stream.message as string}</p>}
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -296,7 +296,7 @@ export default function Onboarding() {
                                                 {...register("schoolName")}
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.schoolName ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
-                                            {errors.schoolName && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.schoolName.message}</p>}
+                                            {errors.schoolName && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.schoolName.message as string}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">School City</label>
@@ -306,7 +306,7 @@ export default function Onboarding() {
                                                 {...register("schoolCity")}
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.schoolCity ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
-                                            {errors.schoolCity && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.schoolCity.message}</p>}
+                                            {errors.schoolCity && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.schoolCity.message as string}</p>}
                                         </div>
                                     </div>
                                 </>
@@ -324,7 +324,7 @@ export default function Onboarding() {
                                                 {...register("university")}
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.university ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
-                                            {errors.university && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.university.message}</p>}
+                                            {errors.university && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.university.message as string}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">College City / Campus</label>
@@ -334,7 +334,7 @@ export default function Onboarding() {
                                                 {...register("collegeCity")}
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.collegeCity ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
-                                            {errors.collegeCity && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.collegeCity.message}</p>}
+                                            {errors.collegeCity && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.collegeCity.message as string}</p>}
                                         </div>
                                     </div>
 
@@ -347,7 +347,7 @@ export default function Onboarding() {
                                                 {...register("major")}
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.major ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
-                                            {errors.major && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.major.message}</p>}
+                                            {errors.major && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.major.message as string}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Graduation Year</label>
@@ -358,7 +358,7 @@ export default function Onboarding() {
                                                 {...register("gradYear")}
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.gradYear ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
-                                            {errors.gradYear && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.gradYear.message}</p>}
+                                            {errors.gradYear && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.gradYear.message as string}</p>}
                                         </div>
                                     </div>
 
@@ -371,7 +371,7 @@ export default function Onboarding() {
                                                 {...register("collegeEmail")}
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.collegeEmail ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
-                                            {errors.collegeEmail && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.collegeEmail.message}</p>}
+                                            {errors.collegeEmail && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.collegeEmail.message as string}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Titles / Expertise</label>
@@ -396,7 +396,7 @@ export default function Onboarding() {
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.aadhaarNumber ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
                                             {// @ts-ignore
-                                                errors.aadhaarNumber && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.aadhaarNumber.message}</p>}
+                                                errors.aadhaarNumber && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.aadhaarNumber.message as string}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Years of Experience</label>
@@ -407,7 +407,7 @@ export default function Onboarding() {
                                                 {...register("experience")}
                                                 className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.experience ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                             />
-                                            {errors.experience && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.experience.message}</p>}
+                                            {errors.experience && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.experience.message as string}</p>}
                                         </div>
                                     </div>
 
@@ -420,7 +420,7 @@ export default function Onboarding() {
                                             className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.bio ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
                                         />
                                         <p className="text-xs text-slate-400 mt-1">Minimum 50 characters.</p>
-                                        {errors.bio && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.bio.message}</p>}
+                                        {errors.bio && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.bio.message as string}</p>}
                                     </div>
 
                                     <div>
@@ -440,7 +440,7 @@ export default function Onboarding() {
                                                 </button>
                                             ))}
                                         </div>
-                                        {errors.languages && <p className="text-red-500 text-xs mt-2 font-semibold">{errors.languages.message}</p>}
+                                        {errors.languages && <p className="text-red-500 text-xs mt-2 font-semibold">{errors.languages.message as string}</p>}
                                     </div>
 
                                     <div>
@@ -455,7 +455,7 @@ export default function Onboarding() {
                                             />
                                         </div>
                                         <p className="text-xs text-slate-400 mt-1">Enter your LinkedIn username/slug only.</p>
-                                        {errors.linkedin && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.linkedin.message}</p>}
+                                        {errors.linkedin && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.linkedin.message as string}</p>}
                                     </div>
 
                                     <div>
@@ -475,7 +475,7 @@ export default function Onboarding() {
                                                 </button>
                                             ))}
                                         </div>
-                                        {errors.specializations && <p className="text-red-500 text-xs mt-2 font-semibold">{errors.specializations.message}</p>}
+                                        {errors.specializations && <p className="text-red-500 text-xs mt-2 font-semibold">{errors.specializations.message as string}</p>}
                                     </div>
                                 </>
                             )}
