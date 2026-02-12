@@ -11,6 +11,8 @@ import { format } from "date-fns";
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-img-element */
 
+import { RequestCollegeModal } from '@/components/student/RequestCollegeModal';
+
 export default function StudentDashboard() {
     const router = useRouter();
     const { user, isLoaded } = useUser();
@@ -22,6 +24,8 @@ export default function StudentDashboard() {
     const [selectedFilter, setSelectedFilter] = useState("All");
     const [selectedConsultant, setSelectedConsultant] = useState<any>(null);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [fetchError, setFetchError] = useState<string | null>(null);
+    const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
     // Role Verification
     useEffect(() => {
@@ -33,23 +37,35 @@ export default function StudentDashboard() {
     }, [user, isLoaded, router]);
 
     const fetchConsultants = useCallback(async () => {
-        const token = await session?.getToken({ template: 'supabase' });
-        const supabase = createClient(token);
-        const { data, error } = await supabase
-            .from('consultants')
-            .select(`
-                *,
-                profiles:id (
-                    full_name,
-                    avatar_url
-                )
-            `);
+        try {
+            const token = await session?.getToken({ template: 'supabase' });
+            if (!token) {
+                console.warn("No Supabase token found in session");
+                setFetchError("No Supabase token found. Check Clerk JWT template.");
+                return;
+            }
 
-        if (error) {
-            console.error('Error fetching consultants:', error);
-        } else {
-            console.log('Fetched consultants:', data);
-            setConsultants(data || []);
+            const supabase = createClient(token);
+            const { data, error } = await supabase
+                .from('consultants')
+                .select(`
+                    *,
+                    profiles:profiles!consultants_id_fkey (
+                        full_name,
+                        avatar_url
+                    )
+                `);
+
+            if (error) {
+                console.error('Error fetching consultants:', error);
+                setFetchError(error.message || JSON.stringify(error));
+            } else {
+                setConsultants(data || []);
+                setFetchError(null);
+            }
+        } catch (err: any) {
+            console.error("Unexpected error:", err);
+            setFetchError(err.message || "Unexpected error occurred");
         }
     }, [session]);
 
@@ -101,14 +117,14 @@ export default function StudentDashboard() {
 
     const filteredConsultants = consultants.filter((consultant) => {
         const matchesSearch =
-            consultant.profiles?.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            consultant.university.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            consultant.major.toLowerCase().includes(searchQuery.toLowerCase());
+            (consultant.profiles?.full_name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (consultant.university || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (consultant.major || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-        const isIIT = consultant.university.includes("IIT") || consultant.university.includes("Indian Institute of Technology");
-        const isNIT = consultant.university.includes("NIT") || consultant.university.includes("National Institute of Technology");
-        const isBITS = consultant.university.includes("BITS") || consultant.university.includes("Pilani");
-        const isDU = consultant.university.includes("Delhi University") || consultant.university.includes("DU");
+        const isIIT = (consultant.university || "").includes("IIT") || (consultant.university || "").includes("Indian Institute of Technology");
+        const isNIT = (consultant.university || "").includes("NIT") || (consultant.university || "").includes("National Institute of Technology");
+        const isBITS = (consultant.university || "").includes("BITS") || (consultant.university || "").includes("Pilani");
+        const isDU = (consultant.university || "").includes("Delhi University") || (consultant.university || "").includes("DU");
 
         const matchesFilter =
             selectedFilter === "All" ||
@@ -127,7 +143,6 @@ export default function StudentDashboard() {
         "NITs",
         "BITS",
         "Delhi University",
-        "Tier 1 Private",
         "Engineering",
         "Medical"
     ];
@@ -139,17 +154,7 @@ export default function StudentDashboard() {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 flex items-center justify-center text-primary">
-                                <svg
-                                    className="w-full h-full"
-                                    fill="currentColor"
-                                    viewBox="0 0 100 100"
-                                >
-                                    <path d="M50 15L10 35L50 55L90 35L50 15Z"></path>
-                                    <path d="M20 45V65C20 65 30 75 50 75C70 75 80 65 80 65V45L50 60L20 45Z"></path>
-                                    <rect height="25" rx="2" width="4" x="82" y="38"></rect>
-                                </svg>
-                            </div>
+                            <span className="material-icons-outlined text-primary text-3xl">school</span>
                             <h2 className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
                                 UniMate
                             </h2>
@@ -157,19 +162,12 @@ export default function StudentDashboard() {
                     </div>
                     <div className="flex flex-1 justify-end gap-6 items-center">
                         <nav className="hidden md:flex items-center gap-8">
-
-                            <Link
-                                className="text-sm font-semibold hover:text-primary transition-colors text-slate-600 dark:text-slate-300"
-                                href="#"
+                            <button
+                                onClick={() => setIsRequestModalOpen(true)}
+                                className="h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors whitespace-nowrap border border-slate-200 dark:border-slate-700"
                             >
-                                My Sessions
-                            </Link>
-                            <Link
-                                className="text-sm font-semibold hover:text-primary transition-colors text-slate-600 dark:text-slate-300"
-                                href="#"
-                            >
-                                Messages
-                            </Link>
+                                + Request College
+                            </button>
                         </nav>
                         <div className="flex items-center gap-4">
                             <button className="flex items-center justify-center rounded-full h-10 w-10 bg-secondary text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
@@ -339,6 +337,7 @@ export default function StudentDashboard() {
                                                 From ₹{consultant.hourly_rate}/hr
                                             </span>
                                         </div>
+
                                         <p className="text-[11px] text-primary font-bold mb-3 uppercase tracking-widest">
                                             {consultant.university} • {consultant.major}
                                         </p>
@@ -374,6 +373,10 @@ export default function StudentDashboard() {
             </main>
 
             {/* Modals */}
+            <RequestCollegeModal
+                isOpen={isRequestModalOpen}
+                onClose={() => setIsRequestModalOpen(false)}
+            />
             {selectedConsultant && (
                 <BookingModal
                     consultant={selectedConsultant}
@@ -393,14 +396,7 @@ export default function StudentDashboard() {
                 />
             )}
 
-            {/* Floating Chat Button */}
-            <div className="fixed bottom-8 right-8 z-40">
-                <button className="flex items-center justify-center w-16 h-16 rounded-full bg-primary text-white shadow-2xl hover:scale-110 active:scale-95 transition-all">
-                    <span className="material-icons-outlined text-[32px]">
-                        chat_bubble
-                    </span>
-                </button>
-            </div>
+
         </div>
     );
 }
