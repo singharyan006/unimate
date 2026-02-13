@@ -14,11 +14,15 @@ export default function VideoCall({ roomName, userName, onLeave }: VideoCallProp
     const [isLoading, setIsLoading] = useState(true);
 
     return (
-        <div className="relative h-[600px] w-full overflow-hidden rounded-xl bg-background border shadow-sm">
+        <div className="relative h-full w-full bg-slate-950 flex flex-col">
             {isLoading && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/50 backdrop-blur-sm">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <span className="ml-2 font-medium text-slate-600 dark:text-slate-300">Loading Meeting...</span>
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950 text-white">
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
+                        <Loader2 className="relative h-12 w-12 animate-spin text-primary mb-4" />
+                    </div>
+                    <h2 className="text-xl font-bold tracking-tight mb-2">Joining Session...</h2>
+                    <p className="text-slate-400 text-sm">Securing your connection to the classroom</p>
                 </div>
             )}
 
@@ -29,6 +33,9 @@ export default function VideoCall({ roomName, userName, onLeave }: VideoCallProp
                     startWithAudioMuted: false,
                     disableThirdPartyRequests: true,
                     prejoinPageEnabled: false,
+                    startWithVideoMuted: false,
+                    backgroundAlpha: 0,
+                    theme: 'dark' // Experimental
                 }}
                 interfaceConfigOverwrite={{
                     disableDeepLinking: true,
@@ -41,9 +48,13 @@ export default function VideoCall({ roomName, userName, onLeave }: VideoCallProp
                         'tileview', 'videobackgroundblur', 'download', 'help', 'mute-everyone',
                         'security'
                     ],
+                    // Customize colors if possible via interfaceConfig, though limited in Jitsi SaaS
+                    DEFAULT_BACKGROUND: '#020617',
+                    DEFAULT_LOCAL_DISPLAY_NAME: 'Me',
                 }}
                 userInfo={{
                     displayName: userName || 'Univoice User',
+                    email: 'user@univoice.io'
                 }}
                 onApiReady={(externalApi) => {
                     setIsLoading(false);
@@ -54,6 +65,9 @@ export default function VideoCall({ roomName, userName, onLeave }: VideoCallProp
                 }}
                 getIFrameRef={(iframeRef) => {
                     iframeRef.style.height = '100%';
+                    iframeRef.style.width = '100%';
+                    iframeRef.style.border = 'none';
+                    iframeRef.style.background = '#020617';
                 }}
             />
         </div>
