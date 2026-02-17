@@ -74,7 +74,7 @@ export default function Home() {
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                                 </span>
-                                TRUSTED BY 10,000+ STUDENTS
+                                Explore Every Detail Before You Decide.
                             </div>
                             <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-slate-900 dark:text-white">
                                 Guidance from those <br />
@@ -98,18 +98,18 @@ export default function Home() {
                                 <div className="flex -space-x-3">
                                     <img
                                         alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeS5YHyLXX73mBV7QYSQTry6AkSUYV-WOiwBQMa08yPjSgvKmOtIF_xnxqZy5SdEg71mB-38AJ_pGShjFGiVJtCRvfUJBZ-XSKgwVLvtLAKVQtWnucTGXUhIBevD2zlA-BBwQsJWHgfYoDI1zT_hBi-QxhsWN9j1QYQGxaT9WANJrbN6fX9W1jtrT0BolSdLOsjeeKx4qEbnIAzxS4wrfyN3RyPNKqGNUt4Kh1yrFX0UMZrOhSIh-xxaOF8SGTRqq_hzURdRUEZJA"
+                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover bg-teal-100"
+                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex&backgroundColor=b6e3f4"
                                     />
                                     <img
                                         alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxFw-y6M444uIvaWtPfru_vV9OvFRKU_cxPJN4zQ2961Ya5JQrzNsGSxsCDUkKAeMAcIrhG0S0ghT8shY9SLDoaskaWXHWmYp2Kfh-OzT810QqjLSk6xPBhclwjlniCXVmw25QPmjhA4etvWdJWMD0MYn-Vrqqv-kT5Qg7I8P5wdnIbEBLG7oQjfNV-9cGnK_spw-Gzs0BA3G2xoOdoXmudHNh5UsfblWHIQDms6CdH0TDCkK04E7FjeKvzx-cr55rrS9KA2whsYo"
+                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover bg-amber-100"
+                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&backgroundColor=ffdfbf"
                                     />
                                     <img
                                         alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD7CDIIExUbeD211N996WRok70xgMVLAVFJRIQRpC5ilwR__Vg0zMWHWKMqjDUSEPUCMKiKW2IHglaafTYRVgaFWeoWSpOvBRR_6Yhu5QVrQdzqTucr5Dw0XaPTYWi4Qtu6t_tjDLBx8arRB--1dtRhxeRpZQH2Hwgz6LSiRj6sMFYVYQsBGP9tTvxKVI87RPJ8z5m8fDXTgwEgD3y8TVt42uZFid9yZWt0zUU8zgM4nOTHfFyYOJ2hH7mtH8_kk3Woqh1s_e-QaA"
+                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover bg-rose-100"
+                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Michael&backgroundColor=ffdfdf"
                                     />
                                     <div className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold">
                                         +5k
@@ -126,7 +126,7 @@ export default function Home() {
                             <img
                                 alt="Students collaborating"
                                 className="rounded-2xl shadow-2xl relative z-10 border border-white/20"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDp9eT3CiRvbTIdQBZ5PPAiDbf6hLYVDwFGu7BnlbOunS7Uv-80iGxGRRDcH-GhKEbC-fXK-dJupi_r_YhL1-cTMBq8Vu3LY45UEzmTyidsg6mnXAxq8cf7SNIXr99arffMTaG7OYyDjwAGXTeaeH5hl21l4bF4XzYJpBTn-DXxkRYo9edEJzsZQPqZlVPmgraHTeWjfRR0OokhPNYr-EY8tQYcy4ISw4rBYGjwT3W3eIgLYQCyJwhl2GYNN8G0uWhmo-8CiwgN7Wo"
+                                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                             />
                         </div>
                     </div>
@@ -278,7 +278,7 @@ export default function Home() {
                                             <img
                                                 alt="Mentor"
                                                 className="w-full h-full object-cover"
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeU4zIl3sv-bEkExqyAiEyssE8PBm3alrmLgpLspsXlTWhXGN4ZwlAHww6Mdt1K5SvK3gOBHIrZs6Kg4w8ZESbs8KMMKVc03Wr4LIT0UOnKvEtBmd7CGHmXNKSTY-LSQrLDGqqoX15pvO-vgi8Qvc3yihRrJHYEHkNXHImeCI7zDb4FWFk98djXZ_L22lIId8bwyqU4vKKjCnCp25IjIef5CSMIe3-Azgigx8XmcOwk16TiGHXE1evVaDlBmvd5hCorTQREVYPed0"
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentor&backgroundColor=c0aede"
                                             />
                                         </div>
                                         <div className="flex items-center gap-2">
@@ -289,7 +289,7 @@ export default function Home() {
                                             <img
                                                 alt="Mentee"
                                                 className="w-full h-full object-cover"
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXKEyx392Kae76ADIKu3zJpTAkgcYnHyX-GZD0ZlUeT4tqLk4B0TTs4y5ZVhKNivzBEgyn9b-jrTP6RmcvERtbrBEgn6lhDty7aDcxZq9-x59bvspTlMAzJWdzPBj3J2chwRjcPirk4cg-yBHB7KnLVTwe2PzYlpzu9c_5PwK5yOQRiNEYcSJvAyKPr24uELwyYofpwEaUEWP76xojWpKg6fOfob1YVB0n6u5WmqJ1NxW8MprwXMBG-bKW6U6yBO0zR9XNa3g6lgY"
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentee&backgroundColor=b6e3f4"
                                             />
                                         </div>
                                     </div>
