@@ -48,12 +48,6 @@ export default function Home() {
                         >
                             Find Mentors
                         </button>
-                        <a
-                            className="hover:text-primary transition-colors"
-                            href="#how-it-works"
-                        >
-                            How it works
-                        </a>
                         <button
                             onClick={handleSmartLogin}
                             className="hover:text-primary transition-colors bg-transparent border-none cursor-pointer"
@@ -483,7 +477,7 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-                        <p>© 2024 UniMate Inc. All rights reserved.</p>
+                        <p>© 2026 UniMate Inc. All rights reserved.</p>
                         <div className="flex gap-6">
                             <span className="flex items-center gap-1">
                                 <span className="material-icons-outlined text-xs">
