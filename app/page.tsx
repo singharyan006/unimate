@@ -149,9 +149,9 @@ export default function Home() {
                                 {[...UNIVERSITIES, ...UNIVERSITIES].map((uni, idx) => (
                                     <div
                                         key={idx}
-                                        className="flex items-center gap-4 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                                        className="flex items-center gap-4 hover:scale-105 transition-all duration-300"
                                     >
-                                        <div className="w-12 h-12 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden p-1 shadow-sm">
+                                        <div className="w-32 h-32 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden p-1.5 shadow-sm">
                                             <img
                                                 src={uni.logo}
                                                 alt={`${uni.name} logo`}
