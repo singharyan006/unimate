@@ -10,16 +10,16 @@ import FAQSection from "@/components/faq-section";
 import { motion } from "framer-motion";
 
 const UNIVERSITIES = [
-    { name: "VIT VELLORE", placeholder: "V" },
-    { name: "SRM IST CHENNAI", placeholder: "S" },
-    { name: "MANIPAL UNIVERSITY JAIPUR", placeholder: "M" },
-    { name: "UPES DEHRADUN", placeholder: "U" },
-    { name: "IIT MADRAS", placeholder: "I" },
-    { name: "JAYPEE INSTITUTE OF TECHNOLOGY", placeholder: "J" },
-    { name: "AMITY UNIVERSITY, NOIDA", placeholder: "A" },
-    { name: "JSS INSTITUTE NOIDA", placeholder: "J" },
-    { name: "DELHI TECHNICAL UNIVERSITY", placeholder: "D" },
-    { name: "BITS PILANI", placeholder: "B" }
+    { name: "VIT VELLORE", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Vellore_Institute_of_Technology_seal_2017.svg/1200px-Vellore_Institute_of_Technology_seal_2017.svg.png" },
+    { name: "SRM IST CHENNAI", logo: "https://logodix.com/logo/1787040.png" },
+    { name: "MANIPAL UNIVERSITY JAIPUR", logo: "https://www.google.com/s2/favicons?domain=jaipur.manipal.edu&sz=256" },
+    { name: "UPES DEHRADUN", logo: "https://www.google.com/s2/favicons?domain=upes.ac.in&sz=256" },
+    { name: "IIT MADRAS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/69/IIT_Madras_Logo.svg/1200px-IIT_Madras_Logo.svg.png" },
+    { name: "JAYPEE INSTITUTE OF TECHNOLOGY", logo: "https://www.google.com/s2/favicons?domain=jiit.ac.in&sz=256" },
+    { name: "AMITY UNIVERSITY, NOIDA", logo: "https://amity.edu/images/logo.png" },
+    { name: "JSS INSTITUTE NOIDA", logo: "https://www.google.com/s2/favicons?domain=jssaten.ac.in&sz=256" },
+    { name: "DELHI TECHNICAL UNIVERSITY", logo: "https://upload.wikimedia.org/wikipedia/en/b/b5/DTU%2C_Delhi_official_logo.png" },
+    { name: "BITS PILANI", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/BITS_Pilani-Logo.svg/1200px-BITS_Pilani-Logo.svg.png" }
 ];
 
 export default function Home() {
@@ -132,7 +132,7 @@ export default function Home() {
                         {/* Gradient Masks for smooth fade on edges */}
                         <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none"></div>
                         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none"></div>
-                        
+
                         <div className="flex w-[200%] gap-8">
                             <motion.div
                                 animate={{
@@ -151,8 +151,14 @@ export default function Home() {
                                         key={idx}
                                         className="flex items-center gap-4 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
                                     >
-                                        <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300">
-                                            {uni.placeholder}
+                                        <div className="w-12 h-12 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden p-1 shadow-sm">
+                                            <img
+                                                src={uni.logo}
+                                                alt={`${uni.name} logo`}
+                                                className="w-full h-full object-contain"
+                                                loading="lazy"
+                                                referrerPolicy="no-referrer"
+                                            />
                                         </div>
                                         <span className="font-bold text-slate-800 dark:text-slate-200 text-lg tracking-wide">
                                             {uni.name}
