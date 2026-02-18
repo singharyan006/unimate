@@ -7,6 +7,20 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import FAQSection from "@/components/faq-section";
+import { motion } from "framer-motion";
+
+const UNIVERSITIES = [
+    { name: "VIT VELLORE", placeholder: "V" },
+    { name: "SRM IST CHENNAI", placeholder: "S" },
+    { name: "MANIPAL UNIVERSITY JAIPUR", placeholder: "M" },
+    { name: "UPES DEHRADUN", placeholder: "U" },
+    { name: "IIT MADRAS", placeholder: "I" },
+    { name: "JAYPEE INSTITUTE OF TECHNOLOGY", placeholder: "J" },
+    { name: "AMITY UNIVERSITY, NOIDA", placeholder: "A" },
+    { name: "JSS INSTITUTE NOIDA", placeholder: "J" },
+    { name: "DELHI TECHNICAL UNIVERSITY", placeholder: "D" },
+    { name: "BITS PILANI", placeholder: "B" }
+];
 
 export default function Home() {
     const { user, isSignedIn } = useUser();
@@ -94,31 +108,6 @@ export default function Home() {
                                     <Link href="#how-it-works">How it works</Link>
                                 </Button>
                             </div>
-                            <div className="flex items-center gap-4 pt-4">
-                                <div className="flex -space-x-3">
-                                    <img
-                                        alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover bg-teal-100"
-                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex&backgroundColor=b6e3f4"
-                                    />
-                                    <img
-                                        alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover bg-amber-100"
-                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&backgroundColor=ffdfbf"
-                                    />
-                                    <img
-                                        alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover bg-rose-100"
-                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Michael&backgroundColor=ffdfdf"
-                                    />
-                                    <div className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold">
-                                        +5k
-                                    </div>
-                                </div>
-                                <p className="text-sm text-slate-500 dark:text-slate-500">
-                                    Joined this week
-                                </p>
-                            </div>
                         </div>
                         <div className="relative">
                             <div className="absolute -top-12 -left-12 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
@@ -128,6 +117,49 @@ export default function Home() {
                                 className="rounded-2xl shadow-2xl relative z-10 border border-white/20"
                                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                             />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Top Universities Marquee Section */}
+                <section className="py-12 bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <div className="max-w-7xl mx-auto px-6 mb-8 text-center">
+                        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+                            Universities we offer guidance for
+                        </p>
+                    </div>
+                    <div className="relative w-full">
+                        {/* Gradient Masks for smooth fade on edges */}
+                        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none"></div>
+                        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none"></div>
+                        
+                        <div className="flex w-[200%] gap-8">
+                            <motion.div
+                                animate={{
+                                    x: ["0%", "-50%"]
+                                }}
+                                transition={{
+                                    repeat: Infinity,
+                                    ease: "linear",
+                                    duration: 40
+                                }}
+                                className="flex gap-12 whitespace-nowrap min-w-max items-center px-4"
+                            >
+                                {/* Render twice for seamless loop */}
+                                {[...UNIVERSITIES, ...UNIVERSITIES].map((uni, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="flex items-center gap-4 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                                    >
+                                        <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300">
+                                            {uni.placeholder}
+                                        </div>
+                                        <span className="font-bold text-slate-800 dark:text-slate-200 text-lg tracking-wide">
+                                            {uni.name}
+                                        </span>
+                                    </div>
+                                ))}
+                            </motion.div>
                         </div>
                     </div>
                 </section>
