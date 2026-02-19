@@ -123,10 +123,13 @@ export default function Home() {
 
                 {/* Top Universities Marquee Section */}
                 <section className="py-12 bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 overflow-hidden">
-                    <div className="max-w-7xl mx-auto px-6 mb-8 text-center">
-                        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">
-                            Universities we offer guidance for
-                        </p>
+                    <div className="max-w-4xl mx-auto px-6 mb-16 text-center">
+                        <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-primary to-slate-900 dark:from-white dark:via-primary dark:to-white">
+                            Get insights from students at
+                        </h2>
+                        <div className="w-24 h-1.5 bg-primary/20 mx-auto rounded-full">
+                            <div className="w-12 h-full bg-primary rounded-full"></div>
+                        </div>
                     </div>
                     <div className="relative w-full">
                         {/* Gradient Masks for smooth fade on edges */}
