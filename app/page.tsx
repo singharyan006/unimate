@@ -16,7 +16,7 @@ const UNIVERSITIES = [
     { name: "UPES DEHRADUN", logo: "https://www.google.com/s2/favicons?domain=upes.ac.in&sz=256" },
     { name: "IIT MADRAS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/69/IIT_Madras_Logo.svg/1200px-IIT_Madras_Logo.svg.png" },
     { name: "JAYPEE INSTITUTE OF TECHNOLOGY", logo: "https://www.google.com/s2/favicons?domain=jiit.ac.in&sz=256" },
-    { name: "AMITY UNIVERSITY, NOIDA", logo: "https://amity.edu/images/logo.png" },
+    { name: "AMITY UNIVERSITY, NOIDA", logo: "https://cdn.freelogovectors.net/wp-content/uploads/2022/03/amity_university_logo_freelogovectors.net_.png" },
     { name: "JSS INSTITUTE NOIDA", logo: "https://www.google.com/s2/favicons?domain=jssaten.ac.in&sz=256" },
     { name: "DELHI TECHNICAL UNIVERSITY", logo: "https://upload.wikimedia.org/wikipedia/en/b/b5/DTU%2C_Delhi_official_logo.png" },
     { name: "BITS PILANI", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/BITS_Pilani-Logo.svg/1200px-BITS_Pilani-Logo.svg.png" }
@@ -122,19 +122,21 @@ export default function Home() {
                 </section>
 
                 {/* Top Universities Marquee Section */}
-                <section className="py-12 bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 overflow-hidden">
-                    <div className="max-w-4xl mx-auto px-6 mb-16 text-center">
-                        <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-primary to-slate-900 dark:from-white dark:via-primary dark:to-white">
-                            Get insights from students at
+                <section className="py-16 bg-slate-100 dark:bg-slate-800 border-y-2 border-slate-200/80 dark:border-slate-700 overflow-hidden relative shadow-inner">
+                    {/* Subtle Background Pattern */}
+                    <div className="absolute inset-0 opacity-50 dark:opacity-30 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #94a3b8 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
+                    <div className="max-w-4xl mx-auto px-6 mb-16 text-center relative z-10">
+                        <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-4 text-slate-800 dark:text-slate-200">
+                            Universities we offer guidance for
                         </h2>
                         <div className="w-24 h-1.5 bg-primary/20 mx-auto rounded-full">
                             <div className="w-12 h-full bg-primary rounded-full"></div>
                         </div>
                     </div>
-                    <div className="relative w-full">
-                        {/* Gradient Masks for smooth fade on edges */}
-                        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none"></div>
-                        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none"></div>
+                    <div className="relative w-full z-10">
+                        {/* Gradient Masks for smooth fade on edges (Matching new background) */}
+                        <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-slate-100 dark:from-slate-800 to-transparent z-20 pointer-events-none"></div>
+                        <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-slate-100 dark:from-slate-800 to-transparent z-20 pointer-events-none"></div>
 
                         <div className="flex w-[200%] gap-8">
                             <motion.div
