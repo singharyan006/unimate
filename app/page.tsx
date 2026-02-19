@@ -277,8 +277,7 @@ export default function Home() {
                                     Book a 1:1 session
                                 </h3>
                                 <p className="text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
-                                    Pick a suitable time slot and book a live video or audio
-                                    session that fits into your schedule.
+                                    Pick a suitable time slot and book a live video session that fits into your schedule.
                                 </p>
                                 <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
                                     <div className="grid grid-cols-4 gap-2 mb-3">
