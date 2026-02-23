@@ -192,55 +192,71 @@ export default function Onboarding() {
     if (!isLoaded || !user) return <div className="flex h-screen items-center justify-center">Loading...</div>;
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-slate-950 p-4">
-            <div className="w-full max-w-2xl bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800">
+        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background-light dark:bg-background-dark p-4 transition-colors duration-300">
+            {/* Dynamic Background Orbs */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+                <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-primary/10 blur-[120px] animate-pulse"></div>
+                <div className="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-blue-500/10 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+            </div>
+
+            {/* Main Container */}
+            <div className="relative z-10 w-full max-w-2xl bg-white dark:bg-slate-800 p-8 sm:p-10 rounded-3xl shadow-xl shadow-primary/5 hover:shadow-2xl transition-shadow duration-500 border border-slate-100 dark:border-slate-700">
 
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-black tracking-tight text-slate-800 dark:text-white">
-                        {step === 0 ? "Welcome to UniMate!" : "Tell us a bit more"}
+                <div className="text-center mb-10">
+                    <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">
+                        {step === 0 ? "Welcome to UniMate" : "Tell us a bit more"}
                     </h2>
-                    <p className="mt-2 text-slate-600 dark:text-slate-400">
+                    <p className="text-slate-600 dark:text-slate-400 text-lg">
                         {step === 0
-                            ? "Choose your role to get started."
+                            ? "Choose your path to get started."
                             : role === 'student'
                                 ? "Complete your profile to find the best mentors."
-                                : "Setup your consultant profile to guide students."}
+                                : "Setup your profile to guide future students."}
                     </p>
-
                 </div>
 
                 {/* STEP 0: Role Selection */}
                 {step === 0 && (
-                    <div className="space-y-6">
-                        <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <button
                                 onClick={() => setRole("student")}
-                                className={`p-6 rounded-xl border-2 transition-all flex flex-col items-center gap-3 ${role === "student"
-                                    ? "border-primary bg-primary/5 ring-2 ring-primary/20"
-                                    : "border-slate-200 dark:border-slate-800 hover:border-primary/50"
+                                className={`p-8 rounded-3xl border-2 transition-all duration-300 flex flex-col items-center justify-center gap-5 text-center group ${role === "student"
+                                    ? "border-primary bg-primary/5 shadow-xl shadow-primary/10 ring-4 ring-primary/10 scale-[1.02]"
+                                    : "border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 hover:border-primary/50 hover:shadow-md"
                                     }`}
                             >
-                                <span className="material-icons-outlined text-4xl text-primary">school</span>
-                                <span className="font-bold text-slate-800 dark:text-white">I'm a Student</span>
+                                <div className={`relative w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 ${role === "student" ? "ring-4 ring-primary ring-offset-4 ring-offset-white dark:ring-offset-slate-800 shadow-lg scale-105" : "opacity-80 group-hover:opacity-100 group-hover:scale-105"}`}>
+                                    <img src="https://api.dicebear.com/9.x/notionists/svg?seed=Aneka&backgroundColor=ede9fe" alt="Student Avatar" className="w-full h-full rounded-full object-cover shadow-inner" />
+                                </div>
+                                <div className="space-y-1.5 mt-2">
+                                    <span className="block font-bold text-slate-800 dark:text-white text-xl">I'm a Student</span>
+                                    <span className="block text-sm text-slate-500 dark:text-slate-400">Looking for college guidance and mentorship.</span>
+                                </div>
                             </button>
 
                             <button
                                 onClick={() => setRole("consultant")}
-                                className={`p-6 rounded-xl border-2 transition-all flex flex-col items-center gap-3 ${role === "consultant"
-                                    ? "border-primary bg-primary/5 ring-2 ring-primary/20"
-                                    : "border-slate-200 dark:border-slate-800 hover:border-primary/50"
+                                className={`p-8 rounded-3xl border-2 transition-all duration-300 flex flex-col items-center justify-center gap-5 text-center group ${role === "consultant"
+                                    ? "border-primary bg-primary/5 shadow-xl shadow-primary/10 ring-4 ring-primary/10 scale-[1.02]"
+                                    : "border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 hover:border-primary/50 hover:shadow-md"
                                     }`}
                             >
-                                <span className="material-icons-outlined text-4xl text-primary">psychology</span>
-                                <span className="font-bold text-slate-800 dark:text-white">I'm a Consultant</span>
+                                <div className={`relative w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 ${role === "consultant" ? "ring-4 ring-primary ring-offset-4 ring-offset-white dark:ring-offset-slate-800 shadow-lg scale-105" : "opacity-80 group-hover:opacity-100 group-hover:scale-105"}`}>
+                                    <img src="https://api.dicebear.com/9.x/notionists/svg?seed=Felix&backgroundColor=e0f2fe" alt="Consultant Avatar" className="w-full h-full rounded-full object-cover shadow-inner" />
+                                </div>
+                                <div className="space-y-1.5 mt-2">
+                                    <span className="block font-bold text-slate-800 dark:text-white text-xl">I'm a Consultant</span>
+                                    <span className="block text-sm text-slate-500 dark:text-slate-400">Share your experience and guide students.</span>
+                                </div>
                             </button>
                         </div>
 
                         <button
                             onClick={() => { if (role) setStep(1); }}
                             disabled={!role}
-                            className="w-full py-4 rounded-xl bg-primary text-white font-bold text-lg shadow-lg shadow-primary/20 hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-4 rounded-xl bg-primary text-white font-bold text-lg shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
                         >
                             Continue
                         </button>
@@ -249,64 +265,62 @@ export default function Onboarding() {
 
                 {/* STEP 1: Details Form */}
                 {step === 1 && (
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
 
-                        {/* Common / Student Fields */}
-                        <div className="space-y-4">
-
+                        <div className="space-y-5">
                             {/* Phone Number - Common */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Phone Number</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Phone Number</label>
                                 <div className="relative flex items-center">
-                                    <span className="absolute left-3 text-slate-500 font-medium select-none pointer-events-none">+91</span>
+                                    <span className="absolute left-4 text-slate-500 dark:text-slate-400 font-medium select-none pointer-events-none">+91</span>
                                     <input
                                         type="tel"
                                         maxLength={10}
                                         placeholder="99999 99999"
                                         {...register("phoneNumber")}
-                                        className={`w-full p-3 pl-12 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.phoneNumber ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                        className={`w-full p-3.5 pl-14 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.phoneNumber ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                     />
                                 </div>
-                                {errors.phoneNumber && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.phoneNumber.message as string}</p>}
+                                {errors.phoneNumber && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.phoneNumber.message as string}</p>}
                             </div>
 
                             {/* Student Specific Fields */}
                             {role === 'student' && (
                                 <>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Stream</label>
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Stream</label>
                                         <select
                                             {...register("stream")}
-                                            className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.stream ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                            className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none ${errors.stream ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                         >
-                                            <option value="">Select Stream</option>
+                                            <option value="" className="bg-white dark:bg-slate-800">Select Stream</option>
                                             {streamOptions.map(opt => (
-                                                <option key={opt} value={opt} className="dark:bg-slate-900">{opt}</option>
+                                                <option key={opt} value={opt} className="bg-white dark:bg-slate-800">{opt}</option>
                                             ))}
                                         </select>
-                                        {errors.stream && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.stream.message as string}</p>}
+                                        {errors.stream && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.stream.message as string}</p>}
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">School Name</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">School Name</label>
                                             <input
                                                 type="text"
                                                 placeholder="e.g. DPS RK Puram"
                                                 {...register("schoolName")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.schoolName ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.schoolName ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            {errors.schoolName && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.schoolName.message as string}</p>}
+                                            {errors.schoolName && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.schoolName.message as string}</p>}
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">School City</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">School City</label>
                                             <input
                                                 type="text"
                                                 placeholder="e.g. New Delhi"
                                                 {...register("schoolCity")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.schoolCity ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.schoolCity ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            {errors.schoolCity && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.schoolCity.message as string}</p>}
+                                            {errors.schoolCity && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.schoolCity.message as string}</p>}
                                         </div>
                                     </div>
                                 </>
@@ -315,125 +329,125 @@ export default function Onboarding() {
                             {/* Consultant Specific Fields */}
                             {role === 'consultant' && (
                                 <>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Current College / University</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Current College / University</label>
                                             <input
                                                 type="text"
                                                 placeholder="e.g. IIT Delhi"
                                                 {...register("university")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.university ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.university ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            {errors.university && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.university.message as string}</p>}
+                                            {errors.university && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.university.message as string}</p>}
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">College City / Campus</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">College City / Campus</label>
                                             <input
                                                 type="text"
                                                 placeholder="e.g. Hauz Khas, Delhi"
                                                 {...register("collegeCity")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.collegeCity ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.collegeCity ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            {errors.collegeCity && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.collegeCity.message as string}</p>}
+                                            {errors.collegeCity && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.collegeCity.message as string}</p>}
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Degree & Branch</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Degree & Branch</label>
                                             <input
                                                 type="text"
                                                 placeholder="e.g. B.Tech Computer Science"
                                                 {...register("major")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.major ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.major ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            {errors.major && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.major.message as string}</p>}
+                                            {errors.major && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.major.message as string}</p>}
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Graduation Year</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Graduation Year</label>
                                             <input
                                                 type="text"
                                                 placeholder="2025"
                                                 maxLength={4}
                                                 {...register("gradYear")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.gradYear ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.gradYear ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            {errors.gradYear && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.gradYear.message as string}</p>}
+                                            {errors.gradYear && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.gradYear.message as string}</p>}
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">College Email ID</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">College Email ID</label>
                                             <input
                                                 type="email"
                                                 placeholder="you@college.edu"
                                                 {...register("collegeEmail")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.collegeEmail ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.collegeEmail ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            {errors.collegeEmail && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.collegeEmail.message as string}</p>}
+                                            {errors.collegeEmail && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.collegeEmail.message as string}</p>}
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Titles / Expertise</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Titles / Expertise</label>
                                             <input
                                                 type="text"
                                                 placeholder="e.g. JEE Ranker, Coding Club Lead"
                                                 {...register("titles")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.titles ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.titles ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            <p className="text-xs text-slate-400 mt-1">Comma separated</p>
+                                            <p className="text-xs text-slate-500 mt-1.5">Comma separated</p>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Aadhaar Number</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Aadhaar Number</label>
                                             <input
                                                 type="text"
                                                 placeholder="12-digit Aadhaar Number"
                                                 maxLength={12}
                                                 {...register("aadhaarNumber")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.aadhaarNumber ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.aadhaarNumber ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
                                             {// @ts-ignore
-                                                errors.aadhaarNumber && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.aadhaarNumber.message as string}</p>}
+                                                errors.aadhaarNumber && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.aadhaarNumber.message as string}</p>}
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Years of Experience</label>
+                                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Years of Experience</label>
                                             <input
                                                 type="number"
                                                 placeholder="0"
                                                 min={0}
                                                 {...register("experience")}
-                                                className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.experience ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.experience ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
-                                            {errors.experience && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.experience.message as string}</p>}
+                                            {errors.experience && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.experience.message as string}</p>}
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Bio / About Me</label>
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Bio / About Me</label>
                                         <textarea
                                             placeholder="Tell us about yourself, your expertise, and how you can help students..."
                                             rows={4}
                                             {...register("bio")}
-                                            className={`w-full p-3 rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.bio ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                            className={`w-full p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.bio ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                         />
-                                        <p className="text-xs text-slate-400 mt-1">Minimum 50 characters.</p>
-                                        {errors.bio && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.bio.message as string}</p>}
+                                        <p className="text-xs text-slate-500 mt-1.5">Minimum 50 characters.</p>
+                                        {errors.bio && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.bio.message as string}</p>}
                                     </div>
 
                                     <div>
                                         <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Languages Spoken</label>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-2.5">
                                             {languageOptions.map(opt => (
                                                 <button
                                                     type="button"
                                                     key={opt}
                                                     onClick={() => handleLanguageToggle(opt)}
-                                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${languages?.includes(opt)
-                                                        ? "bg-primary text-white border-primary"
-                                                        : "bg-transparent border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-primary/50"
+                                                    className={`px-4 py-2.5 rounded-full text-sm font-semibold transition-all border ${languages?.includes(opt)
+                                                        ? "bg-primary text-white border-primary shadow-md shadow-primary/20 scale-[1.02]"
+                                                        : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-primary/50"
                                                         }`}
                                                 >
                                                     {opt}
@@ -444,31 +458,31 @@ export default function Onboarding() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">LinkedIn Profile</label>
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">LinkedIn Profile</label>
                                         <div className="relative flex items-center">
-                                            <span className="hidden sm:inline-block absolute left-3 text-slate-500 text-xs font-medium select-none pointer-events-none truncate max-w-[140px]">linkedin.com/in/</span>
+                                            <span className="hidden sm:inline-block absolute left-4 text-slate-500 dark:text-slate-400 text-sm font-medium select-none pointer-events-none truncate max-w-[140px]">linkedin.com/in/</span>
                                             <input
                                                 type="text"
                                                 placeholder="username"
                                                 {...register("linkedin")}
-                                                className={`w-full p-3 pl-3 sm:pl-[110px] rounded-xl border bg-transparent outline-none focus:ring-2 focus:ring-primary/20 ${errors.linkedin ? "border-red-500" : "border-slate-200 dark:border-slate-800"}`}
+                                                className={`w-full p-3.5 pl-4 sm:pl-[125px] rounded-xl border bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.linkedin ? "border-red-500" : "border-slate-200 dark:border-slate-700 focus:border-primary"}`}
                                             />
                                         </div>
-                                        <p className="text-xs text-slate-400 mt-1">Enter your LinkedIn username/slug only.</p>
-                                        {errors.linkedin && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.linkedin.message as string}</p>}
+                                        <p className="text-xs text-slate-500 mt-1.5">Enter your LinkedIn username/slug only.</p>
+                                        {errors.linkedin && <p className="text-red-500 text-xs mt-1.5 font-semibold">{errors.linkedin.message as string}</p>}
                                     </div>
 
                                     <div>
                                         <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Areas of Expertise</label>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-2.5">
                                             {expertiseOptions.map(opt => (
                                                 <button
                                                     type="button"
                                                     key={opt}
                                                     onClick={() => handleExpertiseToggle(opt)}
-                                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${specializations?.includes(opt)
-                                                        ? "bg-primary text-white border-primary"
-                                                        : "bg-transparent border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-primary/50"
+                                                    className={`px-4 py-2.5 rounded-full text-sm font-semibold transition-all border ${specializations?.includes(opt)
+                                                        ? "bg-primary text-white border-primary shadow-md shadow-primary/20 scale-[1.02]"
+                                                        : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-primary/50"
                                                         }`}
                                                 >
                                                     {opt}
@@ -481,25 +495,24 @@ export default function Onboarding() {
                             )}
                         </div>
 
-                        <div className="flex gap-4 pt-4">
+                        <div className="flex gap-4 pt-6 mt-6 border-t border-slate-100 dark:border-slate-800">
                             <button
                                 type="button"
                                 onClick={() => setStep(0)}
-                                className="px-6 py-4 rounded-xl font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                                className="px-6 py-4 rounded-xl font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-transparent"
                             >
                                 Back
                             </button>
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="flex-1 px-6 py-4 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all disabled:opacity-50"
+                                className="flex-1 px-6 py-4 rounded-xl bg-primary text-white font-bold text-lg shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-lg"
                             >
                                 {loading ? "Setting up Profile..." : "Complete Setup"}
                             </button>
                         </div>
                     </form>
                 )}
-
             </div>
         </div>
     );
