@@ -2,7 +2,7 @@
 
 import { useUser, useSession } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,6 +45,18 @@ export default function Onboarding() {
     const [step, setStep] = useState(0);
     const [role, setRole] = useState<"student" | "consultant" | null>(null);
     const [loading, setLoading] = useState(false);
+
+    // Redirect to dashboard if the user already has a role
+    useEffect(() => {
+        if (isLoaded && user) {
+            const currentRole = user.unsafeMetadata.role as string;
+            if (currentRole === 'student') {
+                router.push('/dashboard');
+            } else if (currentRole === 'consultant') {
+                router.push('/consultant');
+            }
+        }
+    }, [isLoaded, user, router]);
 
     // React Hook Form
     const {
