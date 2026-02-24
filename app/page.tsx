@@ -7,6 +7,20 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import FAQSection from "@/components/faq-section";
+import { motion } from "framer-motion";
+
+const UNIVERSITIES = [
+    { name: "VIT VELLORE", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Vellore_Institute_of_Technology_seal_2017.svg/1200px-Vellore_Institute_of_Technology_seal_2017.svg.png" },
+    { name: "SRM IST CHENNAI", logo: "https://logodix.com/logo/1787040.png" },
+    { name: "MANIPAL UNIVERSITY JAIPUR", logo: "https://www.google.com/s2/favicons?domain=jaipur.manipal.edu&sz=256" },
+    { name: "UPES DEHRADUN", logo: "https://www.google.com/s2/favicons?domain=upes.ac.in&sz=256" },
+    { name: "IIT MADRAS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/69/IIT_Madras_Logo.svg/1200px-IIT_Madras_Logo.svg.png" },
+    { name: "JAYPEE INSTITUTE OF TECHNOLOGY", logo: "https://www.google.com/s2/favicons?domain=jiit.ac.in&sz=256" },
+    { name: "AMITY UNIVERSITY, NOIDA", logo: "https://cdn.freelogovectors.net/wp-content/uploads/2022/03/amity_university_logo_freelogovectors.net_.png" },
+    { name: "JSS INSTITUTE NOIDA", logo: "https://www.google.com/s2/favicons?domain=jssaten.ac.in&sz=256" },
+    { name: "DELHI TECHNICAL UNIVERSITY", logo: "https://upload.wikimedia.org/wikipedia/en/b/b5/DTU%2C_Delhi_official_logo.png" },
+    { name: "BITS PILANI", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/BITS_Pilani-Logo.svg/1200px-BITS_Pilani-Logo.svg.png" }
+];
 
 export default function Home() {
     const { user, isSignedIn } = useUser();
@@ -48,12 +62,6 @@ export default function Home() {
                         >
                             Find Mentors
                         </button>
-                        <a
-                            className="hover:text-primary transition-colors"
-                            href="#how-it-works"
-                        >
-                            How it works
-                        </a>
                         <button
                             onClick={handleSmartLogin}
                             className="hover:text-primary transition-colors bg-transparent border-none cursor-pointer"
@@ -80,7 +88,7 @@ export default function Home() {
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                                 </span>
-                                TRUSTED BY 10,000+ STUDENTS
+                                Explore Every Detail Before You Decide.
                             </div>
                             <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-slate-900 dark:text-white">
                                 Guidance from those <br />
@@ -100,31 +108,6 @@ export default function Home() {
                                     <Link href="#how-it-works">How it works</Link>
                                 </Button>
                             </div>
-                            <div className="flex items-center gap-4 pt-4">
-                                <div className="flex -space-x-3">
-                                    <img
-                                        alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeS5YHyLXX73mBV7QYSQTry6AkSUYV-WOiwBQMa08yPjSgvKmOtIF_xnxqZy5SdEg71mB-38AJ_pGShjFGiVJtCRvfUJBZ-XSKgwVLvtLAKVQtWnucTGXUhIBevD2zlA-BBwQsJWHgfYoDI1zT_hBi-QxhsWN9j1QYQGxaT9WANJrbN6fX9W1jtrT0BolSdLOsjeeKx4qEbnIAzxS4wrfyN3RyPNKqGNUt4Kh1yrFX0UMZrOhSIh-xxaOF8SGTRqq_hzURdRUEZJA"
-                                    />
-                                    <img
-                                        alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxFw-y6M444uIvaWtPfru_vV9OvFRKU_cxPJN4zQ2961Ya5JQrzNsGSxsCDUkKAeMAcIrhG0S0ghT8shY9SLDoaskaWXHWmYp2Kfh-OzT810QqjLSk6xPBhclwjlniCXVmw25QPmjhA4etvWdJWMD0MYn-Vrqqv-kT5Qg7I8P5wdnIbEBLG7oQjfNV-9cGnK_spw-Gzs0BA3G2xoOdoXmudHNh5UsfblWHIQDms6CdH0TDCkK04E7FjeKvzx-cr55rrS9KA2whsYo"
-                                    />
-                                    <img
-                                        alt="Student user"
-                                        className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD7CDIIExUbeD211N996WRok70xgMVLAVFJRIQRpC5ilwR__Vg0zMWHWKMqjDUSEPUCMKiKW2IHglaafTYRVgaFWeoWSpOvBRR_6Yhu5QVrQdzqTucr5Dw0XaPTYWi4Qtu6t_tjDLBx8arRB--1dtRhxeRpZQH2Hwgz6LSiRj6sMFYVYQsBGP9tTvxKVI87RPJ8z5m8fDXTgwEgD3y8TVt42uZFid9yZWt0zUU8zgM4nOTHfFyYOJ2hH7mtH8_kk3Woqh1s_e-QaA"
-                                    />
-                                    <div className="w-12 h-12 rounded-full border-4 border-background-light dark:border-background-dark bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold">
-                                        +5k
-                                    </div>
-                                </div>
-                                <p className="text-sm text-slate-500 dark:text-slate-500">
-                                    Joined this week
-                                </p>
-                            </div>
                         </div>
                         <div className="relative">
                             <div className="absolute -top-12 -left-12 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
@@ -132,8 +115,62 @@ export default function Home() {
                             <img
                                 alt="Students collaborating"
                                 className="rounded-2xl shadow-2xl relative z-10 border border-white/20"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDp9eT3CiRvbTIdQBZ5PPAiDbf6hLYVDwFGu7BnlbOunS7Uv-80iGxGRRDcH-GhKEbC-fXK-dJupi_r_YhL1-cTMBq8Vu3LY45UEzmTyidsg6mnXAxq8cf7SNIXr99arffMTaG7OYyDjwAGXTeaeH5hl21l4bF4XzYJpBTn-DXxkRYo9edEJzsZQPqZlVPmgraHTeWjfRR0OokhPNYr-EY8tQYcy4ISw4rBYGjwT3W3eIgLYQCyJwhl2GYNN8G0uWhmo-8CiwgN7Wo"
+                                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                             />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Top Universities Marquee Section */}
+                <section className="py-16 bg-slate-100 dark:bg-slate-800 border-y-2 border-slate-200/80 dark:border-slate-700 overflow-hidden relative shadow-inner">
+                    {/* Subtle Background Pattern */}
+                    <div className="absolute inset-0 opacity-50 dark:opacity-30 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #94a3b8 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
+                    <div className="max-w-4xl mx-auto px-6 mb-16 text-center relative z-10">
+                        <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-4 text-slate-800 dark:text-slate-200">
+                            Universities we offer guidance for
+                        </h2>
+                        <div className="w-24 h-1.5 bg-primary/20 mx-auto rounded-full">
+                            <div className="w-12 h-full bg-primary rounded-full"></div>
+                        </div>
+                    </div>
+                    <div className="relative w-full z-10">
+                        {/* Gradient Masks for smooth fade on edges (Matching new background) */}
+                        <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-slate-100 dark:from-slate-800 to-transparent z-20 pointer-events-none"></div>
+                        <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-slate-100 dark:from-slate-800 to-transparent z-20 pointer-events-none"></div>
+
+                        <div className="flex w-[200%] gap-8">
+                            <motion.div
+                                animate={{
+                                    x: ["0%", "-50%"]
+                                }}
+                                transition={{
+                                    repeat: Infinity,
+                                    ease: "linear",
+                                    duration: 40
+                                }}
+                                className="flex gap-12 whitespace-nowrap min-w-max items-center px-4"
+                            >
+                                {/* Render twice for seamless loop */}
+                                {[...UNIVERSITIES, ...UNIVERSITIES].map((uni, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="flex items-center gap-4 hover:scale-105 transition-all duration-300"
+                                    >
+                                        <div className="w-32 h-32 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden p-1.5 shadow-sm">
+                                            <img
+                                                src={uni.logo}
+                                                alt={`${uni.name} logo`}
+                                                className="w-full h-full object-contain"
+                                                loading="lazy"
+                                                referrerPolicy="no-referrer"
+                                            />
+                                        </div>
+                                        <span className="font-bold text-slate-800 dark:text-slate-200 text-lg tracking-wide">
+                                            {uni.name}
+                                        </span>
+                                    </div>
+                                ))}
+                            </motion.div>
                         </div>
                     </div>
                 </section>
@@ -240,8 +277,7 @@ export default function Home() {
                                     Book a 1:1 session
                                 </h3>
                                 <p className="text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
-                                    Pick a suitable time slot and book a live video or audio
-                                    session that fits into your schedule.
+                                    Pick a suitable time slot and book a live video session that fits into your schedule.
                                 </p>
                                 <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
                                     <div className="grid grid-cols-4 gap-2 mb-3">
@@ -284,7 +320,7 @@ export default function Home() {
                                             <img
                                                 alt="Mentor"
                                                 className="w-full h-full object-cover"
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeU4zIl3sv-bEkExqyAiEyssE8PBm3alrmLgpLspsXlTWhXGN4ZwlAHww6Mdt1K5SvK3gOBHIrZs6Kg4w8ZESbs8KMMKVc03Wr4LIT0UOnKvEtBmd7CGHmXNKSTY-LSQrLDGqqoX15pvO-vgi8Qvc3yihRrJHYEHkNXHImeCI7zDb4FWFk98djXZ_L22lIId8bwyqU4vKKjCnCp25IjIef5CSMIe3-Azgigx8XmcOwk16TiGHXE1evVaDlBmvd5hCorTQREVYPed0"
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentor&backgroundColor=c0aede"
                                             />
                                         </div>
                                         <div className="flex items-center gap-2">
@@ -295,7 +331,7 @@ export default function Home() {
                                             <img
                                                 alt="Mentee"
                                                 className="w-full h-full object-cover"
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXKEyx392Kae76ADIKu3zJpTAkgcYnHyX-GZD0ZlUeT4tqLk4B0TTs4y5ZVhKNivzBEgyn9b-jrTP6RmcvERtbrBEgn6lhDty7aDcxZq9-x59bvspTlMAzJWdzPBj3J2chwRjcPirk4cg-yBHB7KnLVTwe2PzYlpzu9c_5PwK5yOQRiNEYcSJvAyKPr24uELwyYofpwEaUEWP76xojWpKg6fOfob1YVB0n6u5WmqJ1NxW8MprwXMBG-bKW6U6yBO0zR9XNa3g6lgY"
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentee&backgroundColor=b6e3f4"
                                             />
                                         </div>
                                     </div>
@@ -401,10 +437,20 @@ export default function Home() {
                                 </a>
                                 <a
                                     className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-primary hover:text-white transition-all"
-                                    href="#"
+                                    href="https://www.linkedin.com/company/theunimate/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                 >
                                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.266.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+                                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+                                    </svg>
+                                </a>
+                                <a
+                                    className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-primary hover:text-white transition-all"
+                                    href="mailto:support@unimate.com"
+                                >
+                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                        <path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"></path>
                                     </svg>
                                 </a>
                             </div>
@@ -483,7 +529,7 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-                        <p>© 2024 UniMate Inc. All rights reserved.</p>
+                        <p>© 2026 UniMate Inc. All rights reserved.</p>
                         <div className="flex gap-6">
                             <span className="flex items-center gap-1">
                                 <span className="material-icons-outlined text-xs">
