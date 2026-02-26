@@ -4,16 +4,28 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
-import { useUser, useSession } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 import { format } from "date-fns";
+
+interface Booking {
+    id: string;
+    topic: string;
+    scheduled_at: string;
+    status: string;
+    duration_minutes?: number;
+    profiles?: {
+        full_name: string | null;
+        avatar_url: string | null;
+    };
+}
 
 export default function ConsultantDashboard() {
     const router = useRouter();
     const { user, isLoaded } = useUser();
-    const { session } = useSession();
+    const { getToken } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
-    const [nextSession, setNextSession] = useState<any>(null);
-    const [allBookings, setAllBookings] = useState<any[]>([]);
+    const [nextSession, setNextSession] = useState<Booking | null>(null);
+    const [allBookings, setAllBookings] = useState<Booking[]>([]);
     const [stats, setStats] = useState({
         todaySessions: 0,
         totalEarnings: 0,
@@ -34,58 +46,79 @@ export default function ConsultantDashboard() {
         if (!user) return;
 
         const fetchData = async () => {
-            const token = await session?.getToken({ template: 'supabase' });
-            const supabase = createClient(token);
+            const execute = async (token: string) => {
+                const supabase = createClient(token);
 
-            // 1. Fetch All Upcoming Bookings
-            const { data: bookings, error: bookingsError } = await supabase
-                .from('bookings')
-                .select(`
-                    *,
-                    profiles:profiles!bookings_student_id_fkey (
-                        full_name,
-                        avatar_url
-                    )
-                `)
-                .eq('consultant_id', user.id)
-                .gte('scheduled_at', new Date().toISOString())
-                .order('scheduled_at', { ascending: true });
+                // 1. Fetch All Upcoming Bookings
+                const { data: bookings, error: bookingsError } = await supabase
+                    .from('bookings')
+                    .select(`
+                        *,
+                        profiles:profiles!bookings_student_id_fkey (full_name, avatar_url)
+                    `)
+                    .eq('consultant_id', user.id)
+                    .gte('scheduled_at', new Date().toISOString())
+                    .order('scheduled_at', { ascending: true });
 
-            if (bookings) {
-                setAllBookings(bookings);
-                if (bookings.length > 0) {
-                    setNextSession(bookings[0]);
+                if (bookingsError) throw bookingsError;
+
+                if (bookings) {
+                    setAllBookings(bookings);
+                    if (bookings.length > 0) {
+                        setNextSession(bookings[0]);
+                    }
                 }
+
+                // 2. Fetch Consultant Profile & Stats
+                const { data: profile, error: profileError } = await supabase
+                    .from('consultants')
+                    .select('rating, hourly_rate, review_count')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profileError) throw profileError;
+
+                // 3. Calculate Earnings
+                const { data: completedSessions, error: earningsError } = await supabase
+                    .from('bookings')
+                    .select('duration_minutes, status')
+                    .eq('consultant_id', user.id)
+                    .eq('status', 'completed');
+
+                if (earningsError) throw earningsError;
+
+                const hourlyRate = profile?.hourly_rate || 0;
+                const totalMinutes = completedSessions?.reduce((acc, curr) => acc + (curr.duration_minutes || 0), 0) || 0;
+                const earnings = (totalMinutes / 60) * hourlyRate;
+
+                setStats({
+                    todaySessions: bookings ? bookings.filter(b => new Date(b.scheduled_at).toDateString() === new Date().toDateString()).length : 0,
+                    totalEarnings: earnings,
+                    rating: profile?.rating || 0,
+                    reviewCount: profile?.review_count || 0
+                });
+            };
+
+            try {
+                let token = await getToken({ template: 'supabase' });
+                try {
+                    await execute(token!);
+                } catch (err: unknown) {
+                    const supabaseError = err as { code?: string; status?: number };
+                    if (supabaseError.code === "PGRST303" || supabaseError.status === 401 || supabaseError.status === 403) {
+                        token = await getToken({ template: 'supabase', skipCache: true });
+                        await execute(token!);
+                    } else {
+                        throw err;
+                    }
+                }
+            } catch (err) {
+                console.error('Error fetching consultant dashboard data:', err);
             }
-
-            // 2. Fetch Consultant Profile & Stats
-            const { data: profile } = await supabase
-                .from('consultants')
-                .select('rating, hourly_rate, review_count')
-                .eq('id', user.id)
-                .single();
-
-            // 3. Calculate Earnings from Completed Sessions
-            const { data: completedSessions } = await supabase
-                .from('bookings')
-                .select('duration_minutes, status')
-                .eq('consultant_id', user.id)
-                .eq('status', 'completed');
-
-            const hourlyRate = profile?.hourly_rate || 0;
-            const totalMinutes = completedSessions?.reduce((acc, curr) => acc + (curr.duration_minutes || 0), 0) || 0;
-            const earnings = (totalMinutes / 60) * hourlyRate;
-
-            setStats({
-                todaySessions: bookings ? bookings.filter(b => new Date(b.scheduled_at).toDateString() === new Date().toDateString()).length : 0,
-                totalEarnings: earnings,
-                rating: profile?.rating || 0,
-                reviewCount: profile?.review_count || 0
-            });
         };
 
         fetchData();
-    }, [user, session]);
+    }, [user, getToken]);
 
     const startSession = async () => {
         if (!nextSession) return;
