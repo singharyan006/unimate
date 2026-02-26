@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 export function ConsultantHeader() {
     const pathname = usePathname();
-
     // Helper to format breadcrumb
     const getBreadcrumb = () => {
         const parts = pathname?.split('/').filter(p => p !== "") || [];
@@ -27,14 +25,6 @@ export function ConsultantHeader() {
             </div>
             <div className="flex items-center gap-6">
 
-                <div className="flex items-center gap-3">
-                    <button className="p-2 hover:bg-secondary dark:hover:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400 transition-colors">
-                        <span className="material-symbols-outlined">notifications</span>
-                    </button>
-                    <button className="p-2 hover:bg-secondary dark:hover:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400 transition-colors">
-                        <span className="material-symbols-outlined">settings</span>
-                    </button>
-                </div>
             </div>
         </header>
     );
