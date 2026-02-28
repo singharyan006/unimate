@@ -26,6 +26,7 @@ interface Student {
 }
 
 interface EditForm {
+    full_name: string;
     school_name: string;
     school_city: string;
     stream: string;
@@ -51,6 +52,7 @@ export default function StudentProfilePage() {
     // Edit Modal State
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editForm, setEditForm] = useState<EditForm>({
+        full_name: "",
         school_name: "",
         school_city: "",
         stream: "",
@@ -59,6 +61,7 @@ export default function StudentProfilePage() {
     });
     const [interestInput, setInterestInput] = useState("");
     const [saving, setSaving] = useState(false);
+    const [deleting, setDeleting] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
 
     // Close dropdowns on outside click
@@ -160,6 +163,7 @@ export default function StudentProfilePage() {
     const openEditModal = () => {
         if (!profile || !profile.profiles) return;
         setEditForm({
+            full_name: profile.profiles.full_name || "",
             school_name: profile.school_name || "Not specified",
             school_city: profile.school_city || "Not specified",
             stream: profile.stream || "Not specified",
@@ -173,6 +177,12 @@ export default function StudentProfilePage() {
         setSaving(true);
         setSaveError(null);
 
+        if (!editForm.full_name.trim() || !editForm.school_name.trim() || !editForm.school_city.trim() || !editForm.stream.trim() || !editForm.bio.trim() || editForm.interests.length === 0) {
+            setSaveError("All fields are required. Please fill in all the details.");
+            setSaving(false);
+            return;
+        }
+
         const executeSave = async (token: string) => {
             const supabase = createClient(token);
             const finalInterests = [...(editForm.interests ?? [])];
@@ -181,6 +191,12 @@ export default function StudentProfilePage() {
                 finalInterests.push(pending);
                 setInterestInput("");
             }
+
+            const { error: profileError } = await supabase.from("profiles").update({
+                full_name: editForm.full_name,
+            }).eq("id", user?.id);
+
+            if (profileError) throw profileError;
 
             const { error: studentError } = await supabase.from("students").update({
                 school_name: editForm.school_name,
@@ -213,6 +229,47 @@ export default function StudentProfilePage() {
             setSaveError(error.message || "Failed to save profile");
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        if (!user) return;
+        const confirmed = window.confirm(
+            "Are you absolutely sure you want to delete your entire account? This action cannot be undone and will erase all your profile data and booking history forever."
+        );
+        if (!confirmed) return;
+
+        setDeleting(true);
+        try {
+            // Delete Supabase records securely
+            const executeSupabaseDelete = async (token: string) => {
+                const supabase = createClient(token);
+                // Due to CASCADE setup, deleting 'profiles' will delete 'students' (or vice-versa, depending on your RLs)
+                // We'll explicitly delete both to be safe
+                await supabase.from("students").delete().eq("id", user.id);
+                await supabase.from("profiles").delete().eq("id", user.id);
+            };
+
+            let token = await getToken({ template: "supabase" });
+            try {
+                await executeSupabaseDelete(token!);
+            } catch (err: unknown) {
+                const supabaseError = err as { code?: string; status?: number };
+                if (supabaseError.code === "PGRST303" || supabaseError.status === 401 || supabaseError.status === 403) {
+                    token = await getToken({ template: "supabase", skipCache: true });
+                    await executeSupabaseDelete(token!);
+                }
+            }
+
+            // Finally, delete the Clerk user object automatically signing them out
+            await user.delete();
+
+            // Next.js redirect gracefully
+            router.push("/");
+        } catch (err) {
+            console.error("Failed to delete account:", err);
+            alert("An error occurred while attempting to delete your account. Please try again later.");
+            setDeleting(false);
         }
     };
 
@@ -414,6 +471,31 @@ export default function StudentProfilePage() {
                             <p className="text-white/80 text-sm leading-relaxed mb-8 font-medium">Get internal insights on college life, placements, and campus culture directly from seniors.</p>
                             <Link href="/dashboard/consultants" className="block w-full text-center py-4 bg-white text-primary font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-slate-50 transition-all shadow-xl shadow-black/10 active:scale-95">Explore Mentors</Link>
                         </Card>
+
+                        {/* Danger Zone */}
+                        <Card className="p-8 sm:p-10 border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-900/10 transition-all">
+                            <SectionTitle icon="warning">Danger Zone</SectionTitle>
+                            <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                                Permanently delete your account, bookings, and all associated profile data. This action cannot be undone.
+                            </p>
+                            <button
+                                onClick={handleDeleteAccount}
+                                disabled={deleting}
+                                className="w-full py-4 flex items-center justify-center gap-3 bg-red-100 hover:bg-red-500 text-red-600 hover:text-white dark:bg-red-900/30 dark:hover:bg-red-600 dark:text-red-400 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all"
+                            >
+                                {deleting ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-red-500/20 border-t-red-500 group-hover:border-white/20 group-hover:border-t-white rounded-full animate-spin" />
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="material-symbols-outlined text-lg">delete_forever</span>
+                                        Delete Account
+                                    </>
+                                )}
+                            </button>
+                        </Card>
                     </div>
                 </div>
             </main>
@@ -437,6 +519,9 @@ export default function StudentProfilePage() {
                         {/* Modal Body */}
                         <div className="p-8 sm:p-10 overflow-y-auto grow custom-scrollbar">
                             <div className="space-y-10">
+                                <Field label="Full Name" hint="Your display name">
+                                    <input type="text" value={editForm.full_name} onChange={e => setEditForm({ ...editForm, full_name: e.target.value })} className={inputCls} placeholder="e.g. John Doe" />
+                                </Field>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                                     <Field label="School Name" hint="Where you currently study">
                                         <input type="text" value={editForm.school_name} onChange={e => setEditForm({ ...editForm, school_name: e.target.value })} className={inputCls} placeholder="e.g. Modern School" />
@@ -585,7 +670,9 @@ function Field({ label, children, hint }: { label: string; children: React.React
     return (
         <div className="space-y-3">
             <div className="flex items-center justify-between px-1">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{label}</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    {label} <span className="text-red-500 ml-1">*</span>
+                </label>
                 {hint && <span className="text-[10px] text-primary/60 font-black uppercase tracking-widest">{hint}</span>}
             </div>
             {children}

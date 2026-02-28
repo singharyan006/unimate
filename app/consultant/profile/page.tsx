@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 const LANGUAGE_OPTIONS = [
@@ -41,6 +42,7 @@ interface ConsultantProfile {
 }
 
 interface EditForm {
+    full_name: string;
     university: string;
     major: string;
     graduation_year: string;
@@ -77,6 +79,7 @@ function SectionTitle({ icon, children }: { icon: string; children: React.ReactN
 export default function ProfilePage() {
     const { user, isLoaded } = useUser();
     const { getToken } = useAuth();
+    const router = useRouter();
     const [profile, setProfile] = useState<ConsultantProfile | null>(null);
     const [sessionCount, setSessionCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -89,6 +92,7 @@ export default function ProfilePage() {
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const [expertiseInput, setExpertiseInput] = useState("");
     const [saving, setSaving] = useState(false);
+    const [deleting, setDeleting] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
     const avatarInputRef = useRef<HTMLInputElement>(null);
 
@@ -186,6 +190,7 @@ export default function ProfilePage() {
     const openEditModal = () => {
         if (!profile) return;
         setEditForm({
+            full_name: profile.profiles?.full_name || "",
             university: profile.university || "",
             major: profile.major || "",
             graduation_year: profile.graduation_year || "",
@@ -223,6 +228,18 @@ export default function ProfilePage() {
         setSaving(true);
         setSaveError(null);
 
+        if (!editForm.full_name?.trim() || !editForm.university?.trim() || !editForm.major?.trim() || !editForm.graduation_year?.trim() || !editForm.college_city?.trim() || !editForm.college_email?.trim() || !editForm.aadhaar_number?.trim() || !editForm.bio?.trim() || !editForm.github_url?.trim() || !editForm.linkedin_url?.trim() || (editForm.specializations?.length ?? 0) === 0 || (editForm.languages?.length ?? 0) === 0) {
+            setSaveError("All fields are required. Please fill in all the details.");
+            setSaving(false);
+            return;
+        }
+
+        if (!avatarFile && !avatarPreview) {
+            setSaveError("Profile Photo is required. Please upload an image.");
+            setSaving(false);
+            return;
+        }
+
         const executeSave = async (token: string) => {
             const supabase = createClient(token);
             let finalAvatarUrl = profile?.profiles?.avatar_url || user?.imageUrl;
@@ -238,9 +255,13 @@ export default function ProfilePage() {
 
                 const { data: publicUrlData } = supabase.storage.from("avatars").getPublicUrl(fileName);
                 finalAvatarUrl = publicUrlData.publicUrl;
-
-                await supabase.from("profiles").update({ avatar_url: finalAvatarUrl }).eq("id", user.id);
             }
+
+            const { error: profileError } = await supabase.from("profiles").update({
+                full_name: editForm.full_name,
+                avatar_url: finalAvatarUrl
+            }).eq("id", user.id);
+            if (profileError) throw profileError;
 
             let githubUrl = editForm.github_url?.trim() || null;
             if (githubUrl && !githubUrl.startsWith("http")) githubUrl = `https://github.com/${githubUrl}`;
@@ -288,7 +309,7 @@ export default function ProfilePage() {
                 return {
                     ...prev,
                     ...updatePayload,
-                    profiles: prev.profiles ? { ...prev.profiles, avatar_url: finalAvatarUrl } : null,
+                    profiles: prev.profiles ? { ...prev.profiles, full_name: editForm.full_name, avatar_url: finalAvatarUrl } : null,
                 };
             });
 
@@ -314,6 +335,41 @@ export default function ProfilePage() {
             setSaveError(error.message || "Something went wrong. Please try again.");
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        if (!user) return;
+        const confirmed = window.confirm(
+            "Are you absolutely sure you want to delete your entire account? This action cannot be undone and will erase all your profile data and sessions forever."
+        );
+        if (!confirmed) return;
+
+        setDeleting(true);
+        try {
+            const executeSupabaseDelete = async (token: string) => {
+                const supabase = createClient(token);
+                await supabase.from("consultants").delete().eq("id", user.id);
+                await supabase.from("profiles").delete().eq("id", user.id);
+            };
+
+            let token = await getToken({ template: "supabase" });
+            try {
+                await executeSupabaseDelete(token!);
+            } catch (err: unknown) {
+                const supabaseError = err as { code?: string; status?: number };
+                if (supabaseError.code === "PGRST303" || supabaseError.status === 401 || supabaseError.status === 403) {
+                    token = await getToken({ template: "supabase", skipCache: true });
+                    await executeSupabaseDelete(token!);
+                }
+            }
+
+            await user.delete();
+            router.push("/");
+        } catch (err) {
+            console.error("Failed to delete account:", err);
+            alert("An error occurred while attempting to delete your account. Please try again later.");
+            setDeleting(false);
         }
     };
 
@@ -578,6 +634,31 @@ export default function ProfilePage() {
                             {profile.college_email && <ContactRow icon="school" value={profile.college_email} />}
                         </div>
                     </div>
+
+                    {/* Danger Zone */}
+                    <Card className="p-6 border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-900/10 transition-all">
+                        <SectionTitle icon="warning">Danger Zone</SectionTitle>
+                        <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                            Permanently delete your account, sessions, and all associated profile data. This action cannot be undone.
+                        </p>
+                        <button
+                            onClick={handleDeleteAccount}
+                            disabled={deleting}
+                            className="w-full py-3 flex items-center justify-center gap-2 bg-red-100 hover:bg-red-500 text-red-600 hover:text-white dark:bg-red-900/30 dark:hover:bg-red-600 dark:text-red-400 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all"
+                        >
+                            {deleting ? (
+                                <>
+                                    <div className="w-4 h-4 border-2 border-red-500/20 border-t-red-500 group-hover:border-white/20 group-hover:border-t-white rounded-full animate-spin" />
+                                    Deleting...
+                                </>
+                            ) : (
+                                <>
+                                    <span className="material-symbols-outlined text-[16px]">delete_forever</span>
+                                    Delete Account
+                                </>
+                            )}
+                        </button>
+                    </Card>
                 </div>
             </div>
 
@@ -602,7 +683,9 @@ export default function ProfilePage() {
                                     <div className="w-20 h-20 rounded-2xl bg-cover bg-center border-2 border-white dark:border-slate-700 shadow-md shrink-0"
                                         style={{ backgroundImage: `url("${avatarPreview}")` }} />
                                     <div>
-                                        <p className="font-bold text-slate-700 dark:text-slate-200 text-sm mb-1">Profile Photo</p>
+                                        <p className="font-bold text-slate-700 dark:text-slate-200 text-sm mb-1">
+                                            Profile Photo <span className="text-red-500 ml-1">*</span>
+                                        </p>
                                         <p className="text-xs text-slate-500 mb-3">JPG or PNG. Upload a clear, professional photo.</p>
                                         <button type="button" onClick={() => avatarInputRef.current?.click()}
                                             className="px-3 py-1.5 text-xs font-bold bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
@@ -617,8 +700,11 @@ export default function ProfilePage() {
                                 </div>
 
                                 {/* Education */}
-                                <FieldGroup label="Education">
+                                <FieldGroup label="Basic Info & Education">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <Field label="Full Name">
+                                            <input type="text" value={editForm.full_name || ""} onChange={e => setEditForm({ ...editForm, full_name: e.target.value })} placeholder="e.g. John Doe" className={inputCls} />
+                                        </Field>
                                         <Field label="University / College">
                                             <input type="text" value={editForm.university} onChange={e => setEditForm({ ...editForm, university: e.target.value })} placeholder="e.g. IIT Delhi" className={inputCls} />
                                         </Field>
@@ -634,8 +720,8 @@ export default function ProfilePage() {
                                         <Field label="College Email">
                                             <input type="email" value={editForm.college_email} onChange={e => setEditForm({ ...editForm, college_email: e.target.value })} placeholder="you@college.edu" className={inputCls} />
                                         </Field>
-                                        <Field label="Years of Experience">
-                                            <input type="number" min={0} value={editForm.experience_years} onChange={e => setEditForm({ ...editForm, experience_years: e.target.value })} className={inputCls} />
+                                        <Field label="Current year of college">
+                                            <input type="number" min={1} max={5} value={editForm.experience_years} onChange={e => setEditForm({ ...editForm, experience_years: e.target.value })} placeholder="e.g. 3" className={inputCls} />
                                         </Field>
                                     </div>
                                 </FieldGroup>
@@ -794,6 +880,7 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
         <div>
             <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                 {label}
+                <span className="text-red-500 ml-1">*</span>
                 {hint && <span className="ml-1.5 text-xs text-slate-400 font-normal">({hint})</span>}
             </label>
             {children}

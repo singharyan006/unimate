@@ -3,11 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
 
 export function ConsultantSidebar() {
     const pathname = usePathname();
     const { user } = useUser();
+    const { signOut } = useClerk();
 
     const isActive = (path: string) => {
         return pathname === path || pathname?.startsWith(`${path}/`);
@@ -53,6 +54,14 @@ export function ConsultantSidebar() {
                 </Link>
 
                 <Link
+                    className={getLinkClass("/consultant/network")}
+                    href="/consultant/network"
+                >
+                    <span className="material-symbols-outlined fill-icon">groups</span>
+                    <span>Network</span>
+                </Link>
+
+                <Link
                     className={getLinkClass("/consultant/profile")}
                     href="/consultant/profile"
                 >
@@ -77,12 +86,21 @@ export function ConsultantSidebar() {
                         </p>
                     </div>
                 </div>
-                <Link
-                    className="w-full bg-primary text-white py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-sm shadow-primary/20 block text-center"
-                    href="/consultant/profile"
-                >
-                    View Profile
-                </Link>
+                <div className="flex flex-col gap-2">
+                    <Link
+                        className="w-full bg-primary text-white py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-sm shadow-primary/20 block text-center"
+                        href="/consultant/profile"
+                    >
+                        View Profile
+                    </Link>
+                    <button
+                        onClick={() => signOut({ redirectUrl: "/" })}
+                        className="w-full flex justify-center items-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 py-2.5 rounded-xl text-sm font-bold hover:bg-red-100 dark:hover:bg-red-900/40 transition-all"
+                    >
+                        <span className="material-symbols-outlined text-sm font-bold">logout</span>
+                        Sign Out
+                    </button>
+                </div>
             </div>
         </aside>
     );
