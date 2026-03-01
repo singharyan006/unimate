@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 
@@ -23,11 +24,17 @@ export function ConsultantSidebar() {
 
     return (
         <aside className="w-64 border-r border-teal-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col shrink-0">
-            <div className="p-6 flex items-center gap-3">
-                <span className="material-icons-outlined text-primary text-3xl">school</span>
-                <h2 className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
-                    UniMate
-                </h2>
+            <div className="p-6">
+                <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity group">
+                    <Image
+                        src="/unimate.png"
+                        alt="UniMate"
+                        width={36}
+                        height={36}
+                        className="h-9 w-9 rounded-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                    <h2 className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">UniMate</h2>
+                </Link>
             </div>
             <div className="flex flex-col gap-1 px-4 grow">
                 <Link
@@ -44,20 +51,7 @@ export function ConsultantSidebar() {
                     <span className="material-symbols-outlined">calendar_today</span>
                     <span>Schedule</span>
                 </Link>
-                <Link
-                    className={getLinkClass("/consultant/earnings")}
-                    href="/consultant/earnings"
-                >
-                    <span className="material-symbols-outlined">payments</span>
-                    <span>Earnings</span>
-                </Link>
-                <Link
-                    className={getLinkClass("/consultant/reviews")}
-                    href="/consultant/reviews"
-                >
-                    <span className="material-symbols-outlined">star</span>
-                    <span>Reviews</span>
-                </Link>
+
                 <Link
                     className={getLinkClass("/consultant/profile")}
                     href="/consultant/profile"
