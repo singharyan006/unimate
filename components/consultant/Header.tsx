@@ -16,7 +16,7 @@ export function ConsultantHeader() {
         <header className="flex items-center justify-between px-8 py-4 bg-white dark:bg-slate-900 border-b border-teal-100 dark:border-slate-800 sticky top-0 z-10 transition-colors">
             <div className="flex flex-col">
                 <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-semibold tracking-wide uppercase">
-                    <span>UniMate</span>
+                    <Link href="/" className="hover:text-primary transition-colors">UniMate</Link>
                     <span className="material-symbols-outlined text-[14px]">
                         chevron_right
                     </span>
