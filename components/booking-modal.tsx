@@ -6,7 +6,11 @@ import { useUser, useSession } from "@clerk/nextjs";
 import { format, addDays, setHours, setMinutes } from "date-fns";
 
 interface BookingModalProps {
-    consultant: any;
+    consultant: {
+        id: string;
+        hourly_rate: number;
+        profiles?: { full_name: string | null } | null;
+    };
     onClose: () => void;
     onSuccess: () => void;
 }
@@ -38,7 +42,9 @@ export function BookingModal({ consultant, onClose, onSuccess }: BookingModalPro
 
             // Parse time
             const [time, period] = selectedTime.split(' ');
-            let [hours, minutes] = time.split(':').map(Number);
+            const timeParts = time.split(':');
+            let hours = Number(timeParts[0]);
+            const minutes = Number(timeParts[1]);
             if (period === 'PM' && hours !== 12) hours += 12;
             if (period === 'AM' && hours === 12) hours = 0;
 
@@ -60,9 +66,10 @@ export function BookingModal({ consultant, onClose, onSuccess }: BookingModalPro
             }
 
             onSuccess();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Booking failed", error);
-            alert(`Failed to book session: ${error.message || error.error_description || "Unknown error"}`);
+            const err = error as { message?: string, error_description?: string };
+            alert(`Failed to book session: ${err.message || err.error_description || "Unknown error"}`);
         } finally {
             setLoading(false);
         }
@@ -73,7 +80,7 @@ export function BookingModal({ consultant, onClose, onSuccess }: BookingModalPro
             <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 border border-slate-200 dark:border-slate-800">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-                        Book Session with {consultant.profiles.full_name}
+                        Book Session with {consultant.profiles?.full_name || "Consultant"}
                     </h2>
                     <button onClick={onClose} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
                         <span className="material-icons-outlined">close</span>
