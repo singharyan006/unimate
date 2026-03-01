@@ -2,30 +2,75 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { createClient } from "@/lib/supabase";
-import { useUser, useSession } from "@clerk/nextjs";
+import { useUser, useAuth, useClerk } from "@clerk/nextjs";
 import { BookingModal } from "@/components/booking-modal";
 import { SuccessModal } from "@/components/success-modal";
 import { format } from "date-fns";
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 
 import { RequestCollegeModal } from '@/components/student/RequestCollegeModal';
+
+interface Consultant {
+    id: string;
+    profiles?: {
+        full_name: string | null;
+        avatar_url: string | null;
+    };
+    university: string;
+    major: string;
+    rating: number;
+    review_count: number;
+    hourly_rate: number;
+    bio: string;
+    specializations: string[];
+}
+
+interface DashboardBooking {
+    id: string;
+    topic: string;
+    scheduled_at: string;
+    duration_minutes: number;
+    consultants: {
+        profiles: {
+            full_name: string | null;
+            avatar_url: string | null;
+            role: string | null;
+        };
+        university: string;
+        major: string;
+    } | null;
+}
 
 export default function StudentDashboard() {
     const router = useRouter();
     const { user, isLoaded } = useUser();
-    const { session } = useSession();
+    const { getToken } = useAuth();
     const [loadingSession, setLoadingSession] = useState(false);
-    const [consultants, setConsultants] = useState<any[]>([]);
-    const [upcomingSessions, setUpcomingSessions] = useState<any[]>([]);
+    const [consultants, setConsultants] = useState<Consultant[]>([]);
+    const [upcomingSessions, setUpcomingSessions] = useState<DashboardBooking[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedFilter, setSelectedFilter] = useState("All");
-    const [selectedConsultant, setSelectedConsultant] = useState<any>(null);
+    const [selectedConsultant, setSelectedConsultant] = useState<Consultant | null>(null);
     const [showSuccess, setShowSuccess] = useState(false);
-    const [fetchError, setFetchError] = useState<string | null>(null);
     const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [hasUnread, setHasUnread] = useState(true);
+    const notifRef = useRef<HTMLDivElement>(null);
+    const profileRef = useRef<HTMLDivElement>(null);
+    const { signOut } = useClerk();
+
+    // Close dropdowns on outside click
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (notifRef.current && !notifRef.current.contains(e.target as Node)) setShowNotifications(false);
+            if (profileRef.current && !profileRef.current.contains(e.target as Node)) setShowProfileMenu(false);
+        };
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, []);
 
     // Role Verification
     useEffect(() => {
@@ -37,74 +82,88 @@ export default function StudentDashboard() {
     }, [user, isLoaded, router]);
 
     const fetchConsultants = useCallback(async () => {
-        try {
-            const token = await session?.getToken({ template: 'supabase' });
-            if (!token) {
-                console.warn("No Supabase token found in session");
-                setFetchError("No Supabase token found. Check Clerk JWT template.");
-                return;
-            }
-
+        const execute = async (token: string) => {
             const supabase = createClient(token);
             const { data, error } = await supabase
                 .from('consultants')
                 .select(`
                     *,
-                    profiles:profiles!consultants_id_fkey (
-                        full_name,
-                        avatar_url
-                    )
+                    profiles:profiles!consultants_id_fkey (full_name, avatar_url)
                 `);
 
-            if (error) {
-                console.error('Error fetching consultants:', error);
-                setFetchError(error.message || JSON.stringify(error));
-            } else {
-                setConsultants(data || []);
-                setFetchError(null);
+            if (error) throw error;
+            setConsultants(data || []);
+        };
+
+        try {
+            let token = await getToken({ template: 'supabase' });
+            try {
+                await execute(token!);
+            } catch (err: unknown) {
+                const supabaseError = err as { code?: string; status?: number };
+                if (supabaseError.code === "PGRST303" || supabaseError.status === 401 || supabaseError.status === 403) {
+                    token = await getToken({ template: 'supabase', skipCache: true });
+                    await execute(token!);
+                } else {
+                    throw err;
+                }
             }
-        } catch (err: any) {
-            console.error("Unexpected error:", err);
-            setFetchError(err.message || "Unexpected error occurred");
+        } catch (err: unknown) {
+            console.error('Error fetching consultants:', err);
         }
-    }, [session]);
+    }, [getToken]);
 
     const fetchUpcomingSessions = useCallback(async () => {
         if (!user) return;
-        const token = await session?.getToken({ template: 'supabase' });
-        const supabase = createClient(token);
-        const { data, error } = await supabase
-            .from('bookings')
-            .select(`
-                *,
-                consultants (
-                    profiles (
-                        full_name,
-                        avatar_url,
-                        role
-                    ),
-                    university,
-                    major
-                )
-            `)
-            .eq('student_id', user.id)
-            .gte('scheduled_at', new Date().toISOString())
-            .order('scheduled_at', { ascending: true });
 
-        if (error) console.error('Error fetching sessions:', error);
-        else setUpcomingSessions(data || []);
-    }, [user, session]);
+        const execute = async (token: string) => {
+            const supabase = createClient(token);
+            const { data, error } = await supabase
+                .from('bookings')
+                .select(`
+                    *,
+                    consultants (
+                        profiles (full_name, avatar_url, role),
+                        university,
+                        major
+                    )
+                `)
+                .eq('student_id', user.id)
+                .gte('scheduled_at', new Date().toISOString())
+                .order('scheduled_at', { ascending: true });
+
+            if (error) throw error;
+            setUpcomingSessions(data || []);
+        };
+
+        try {
+            let token = await getToken({ template: 'supabase' });
+            try {
+                await execute(token!);
+            } catch (err: unknown) {
+                const supabaseError = err as { code?: string; status?: number };
+                if (supabaseError.code === "PGRST303" || supabaseError.status === 401 || supabaseError.status === 403) {
+                    token = await getToken({ template: 'supabase', skipCache: true });
+                    await execute(token!);
+                } else {
+                    throw err;
+                }
+            }
+        } catch (err) {
+            console.error('Error fetching sessions:', err);
+        }
+    }, [user, getToken]);
 
     useEffect(() => {
         fetchConsultants();
         fetchUpcomingSessions();
     }, [fetchConsultants, fetchUpcomingSessions]);
 
-    const joinSession = async (session: any) => {
+    const joinSession = async (sessionData: DashboardBooking) => {
         setLoadingSession(true);
         try {
             // Use session ID for room
-            const roomName = `unimate-session-${session.id}`;
+            const roomName = `unimate-session-${sessionData.id}`;
             const userName = user?.fullName || "Student User";
             router.push(`/session?room=${roomName}&user=${encodeURIComponent(userName)}`);
         } catch (error) {
@@ -153,12 +212,16 @@ export default function StudentDashboard() {
             <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-background-dark/80 backdrop-blur-md px-6 md:px-10 lg:px-40 py-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-3">
-                            <span className="material-icons-outlined text-primary text-3xl">school</span>
-                            <h2 className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
-                                UniMate
-                            </h2>
-                        </div>
+                        <Link href="/" className="flex items-center gap-2 group transition-opacity hover:opacity-80">
+                            <Image
+                                src="/unimate.png"
+                                alt="UniMate"
+                                width={36}
+                                height={36}
+                                className="rounded-full object-cover"
+                            />
+                            <h2 className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">UniMate</h2>
+                        </Link>
                     </div>
                     <div className="flex flex-1 justify-end gap-6 items-center">
                         <nav className="hidden md:flex items-center gap-8">
@@ -169,19 +232,111 @@ export default function StudentDashboard() {
                                 + Request College
                             </button>
                         </nav>
-                        <div className="flex items-center gap-4">
-                            <button className="flex items-center justify-center rounded-full h-10 w-10 bg-secondary text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                                <span className="material-icons-outlined text-[20px]">
-                                    notifications
-                                </span>
-                            </button>
-                            <div
-                                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-10 w-10 ring-2 ring-primary/20"
-                                style={{
-                                    backgroundImage:
-                                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBsfBElRnXInk8IXrWQOnTB7cqmP1JyvelG-6BoyyiVnWJXbSSi4eo_dTi_-v67EPpWQoyrmFDH73AfpLAF_B6pc0i34C8GppYnIUK8h6iKMAV4JM4LeJQXwMGzSF14MaRiOMA8XnAHbC6xVi-dtAb6E3opLKB6MXNnSzdoIIJBLqIA_E0eVKSQD8bl_zauTzVFQR1bTxbvRAWRzE2MHFrZm2VhAKzOIfNGvQXh5nh19Py5xBsXUjxBB-lbAFU8wKscHoOqC5Qul4Y")',
-                                }}
-                            ></div>
+                        <div className="flex items-center gap-3">
+
+                            {/* Notification Bell */}
+                            <div className="relative" ref={notifRef}>
+                                <button
+                                    onClick={() => { setShowNotifications(v => !v); setShowProfileMenu(false); }}
+                                    className="relative flex items-center justify-center rounded-full h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                                >
+                                    <span className="material-icons-outlined text-[20px]">notifications</span>
+                                    {/* Unread dot — only shown when there are unread notifs */}
+                                    {hasUnread && (
+                                        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900" />
+                                    )}
+                                </button>
+
+                                {showNotifications && (
+                                    <div className="absolute right-0 top-12 w-80 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 overflow-hidden">
+                                        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+                                            <h3 className="font-bold text-slate-800 dark:text-white text-sm">Notifications</h3>
+                                            {hasUnread && (
+                                                <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full">1 new</span>
+                                            )}
+                                        </div>
+                                        <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                                            <div className="flex items-start gap-3 px-5 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                                                    <span className="material-icons-outlined text-primary text-sm">campaign</span>
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-bold text-slate-800 dark:text-white">Welcome to UniMate! 🎉</p>
+                                                    <p className="text-xs text-slate-500 mt-0.5">Explore consultants and book your first session.</p>
+                                                    <p className="text-[10px] text-slate-400 mt-1">Just now</p>
+                                                </div>
+                                                {/* Per-notification unread dot */}
+                                                {hasUnread && (
+                                                    <div className="w-2 h-2 bg-primary rounded-full shrink-0 mt-1.5" />
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 text-center">
+                                            {hasUnread ? (
+                                                <button
+                                                    onClick={() => setHasUnread(false)}
+                                                    className="text-xs text-primary font-bold hover:underline"
+                                                >
+                                                    Mark all as read
+                                                </button>
+                                            ) : (
+                                                <span className="text-xs text-slate-400">All caught up ✓</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Profile Avatar */}
+                            <div className="relative" ref={profileRef}>
+                                <button
+                                    onClick={() => { setShowProfileMenu(v => !v); setShowNotifications(false); }}
+                                    className="relative rounded-full h-10 w-10 ring-2 ring-primary/30 hover:ring-primary/60 transition-all overflow-hidden"
+                                >
+                                    <Image
+                                        src={user?.imageUrl || "https://api.dicebear.com/9.x/notionists/svg?seed=student"}
+                                        alt="Profile"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </button>
+
+                                {showProfileMenu && (
+                                    <div className="absolute right-0 top-12 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 overflow-hidden py-1">
+                                        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+                                            <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{user?.fullName || "Student"}</p>
+                                            <p className="text-xs text-slate-500 truncate">{user?.primaryEmailAddress?.emailAddress}</p>
+                                        </div>
+                                        <div className="py-1">
+                                            <Link
+                                                href="/dashboard/profile"
+                                                onClick={() => setShowProfileMenu(false)}
+                                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                                            >
+                                                <span className="material-icons-outlined text-base text-slate-400">person</span>
+                                                My Profile
+                                            </Link>
+                                            <Link
+                                                href="/dashboard"
+                                                onClick={() => setShowProfileMenu(false)}
+                                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                                            >
+                                                <span className="material-icons-outlined text-base text-slate-400">dashboard</span>
+                                                Dashboard
+                                            </Link>
+                                        </div>
+                                        <div className="border-t border-slate-100 dark:border-slate-800 py-1">
+                                            <button
+                                                onClick={() => signOut({ redirectUrl: "/" })}
+                                                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                            >
+                                                <span className="material-icons-outlined text-base">logout</span>
+                                                Sign Out
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -226,7 +381,7 @@ export default function StudentDashboard() {
                                                 {session.consultants?.profiles?.full_name || "Consultant"}
                                             </p>
                                             <p className="text-xs text-primary font-medium mt-1">
-                                                {session.consultants?.university}
+                                                {session.consultants?.university || "University"}
                                             </p>
                                         </div>
                                         <div className="ml-auto bg-primary text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest">
@@ -308,9 +463,9 @@ export default function StudentDashboard() {
                             </button>
                         </div>
 
-                        {/* Consultant Grid */}
+                        {/* Consultant Grid — shows first 4 */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {filteredConsultants.map((consultant) => (
+                            {filteredConsultants.slice(0, 4).map((consultant) => (
                                 <div key={consultant.id} className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1">
                                     <div
                                         className="relative h-52 w-full bg-center bg-cover"
@@ -319,27 +474,19 @@ export default function StudentDashboard() {
                                         }}
                                     >
                                         <div className="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-xl px-2.5 py-1 flex items-center gap-1 shadow-sm">
-                                            <span className="material-icons-outlined text-yellow-500 text-sm">
-                                                star
-                                            </span>
-                                            <span className="text-xs font-bold text-slate-800 dark:text-white">
-                                                {consultant.rating}
-                                            </span>
+                                            <span className="material-icons-outlined text-yellow-500 text-sm">star</span>
+                                            <span className="text-xs font-bold text-slate-800 dark:text-white">{consultant.rating}</span>
                                             <span className="text-[10px] text-slate-500">({consultant.review_count})</span>
                                         </div>
                                     </div>
                                     <div className="p-5 flex flex-col flex-1">
-                                        <div className="flex justify-between items-start mb-2">
+                                        <div className="mb-2">
                                             <h3 className="font-bold text-lg text-slate-800 dark:text-white group-hover:text-primary transition-colors">
-                                                {consultant.profiles?.full_name}
+                                                {consultant.profiles?.full_name || "Consultant"}
                                             </h3>
-                                            <span className="text-primary font-black text-sm">
-                                                From ₹{consultant.hourly_rate}/hr
-                                            </span>
                                         </div>
-
                                         <p className="text-[11px] text-primary font-bold mb-3 uppercase tracking-widest">
-                                            {consultant.university} • {consultant.major}
+                                            {consultant.university || "University"} • {consultant.major || "Major"}
                                         </p>
                                         <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2 mb-5 leading-relaxed">
                                             {consultant.bio}
@@ -363,10 +510,13 @@ export default function StudentDashboard() {
                         </div>
 
                         <div className="flex justify-center mt-10 pb-12">
-                            <button className="flex items-center gap-2 px-10 py-3.5 bg-white dark:bg-slate-900 border border-primary/20 dark:border-slate-800 rounded-2xl font-bold text-primary hover:bg-secondary transition-all shadow-sm">
+                            <Link
+                                href="/dashboard/consultants"
+                                className="flex items-center gap-2 px-10 py-3.5 bg-white dark:bg-slate-900 border border-primary/20 dark:border-slate-800 rounded-2xl font-bold text-primary hover:bg-secondary dark:hover:bg-slate-800 transition-all shadow-sm"
+                            >
                                 Show More Experts
-                                <span className="material-icons-outlined">expand_more</span>
-                            </button>
+                                <span className="material-icons-outlined">arrow_forward</span>
+                            </Link>
                         </div>
                     </div>
                 </section>
