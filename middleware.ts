@@ -1,13 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher([
-  '/',
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/webhooks(.*)'
-]);
-
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
   '/consultant(.*)',
@@ -17,7 +10,7 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId, sessionClaims } = await auth();
+  const { userId } = await auth();
 
   // 1. Protect Logic (Manual check instead of auth().protect())
   if (!userId && isProtectedRoute(req)) {
