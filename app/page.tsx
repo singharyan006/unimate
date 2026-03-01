@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -47,14 +47,16 @@ export default function Home() {
             {/* Navigation */}
             <nav className="fixed top-0 w-full z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <span className="material-icons-outlined text-primary text-3xl">
-                            school
-                        </span>
-                        <span className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                            UniMate
-                        </span>
-                    </div>
+                    <Link href="/" className="flex items-center gap-2 group transition-all hover:opacity-80">
+                        <Image
+                            src="/unimate.png"
+                            alt="UniMate"
+                            width={36}
+                            height={36}
+                            className="rounded-full object-cover group-hover:rotate-12 transition-transform duration-500"
+                        />
+                        <span className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">UniMate</span>
+                    </Link>
                     <div className="hidden md:flex items-center gap-8 font-semibold text-slate-600 dark:text-slate-300">
                         <button
                             onClick={handleSmartLogin}
@@ -113,9 +115,9 @@ export default function Home() {
                             <div className="absolute -top-12 -left-12 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
                             <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
                             <img
-                                alt="Students collaborating"
-                                className="rounded-2xl shadow-2xl relative z-10 border border-white/20"
                                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Students collaborating"
+                                className="w-full h-auto rounded-2xl shadow-2xl relative z-10 border border-white/20"
                             />
                         </div>
                     </div>
@@ -156,13 +158,11 @@ export default function Home() {
                                         key={idx}
                                         className="flex items-center gap-4 hover:scale-105 transition-all duration-300"
                                     >
-                                        <div className="w-32 h-32 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden p-1.5 shadow-sm">
+                                        <div className="relative w-32 h-32 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden p-1.5 shadow-sm">
                                             <img
                                                 src={uni.logo}
                                                 alt={`${uni.name} logo`}
-                                                className="w-full h-full object-contain"
-                                                loading="lazy"
-                                                referrerPolicy="no-referrer"
+                                                className="w-full h-full object-contain p-2"
                                             />
                                         </div>
                                         <span className="font-bold text-slate-800 dark:text-slate-200 text-lg tracking-wide">
@@ -316,22 +316,22 @@ export default function Home() {
                                 </p>
                                 <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-700 relative overflow-hidden group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
                                     <div className="flex items-center justify-center gap-6 py-4">
-                                        <div className="w-16 h-16 rounded-full bg-teal-100 dark:bg-teal-900 border-2 border-primary overflow-hidden">
+                                        <div className="relative w-16 h-16 rounded-full bg-teal-100 dark:bg-teal-900 border-2 border-primary overflow-hidden">
                                             <img
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentor&backgroundColor=c0aede"
                                                 alt="Mentor"
                                                 className="w-full h-full object-cover"
-                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentor&backgroundColor=c0aede"
                                             />
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
                                             <div className="h-2 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
                                         </div>
-                                        <div className="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                                        <div className="relative w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
                                             <img
+                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentee&backgroundColor=b6e3f4"
                                                 alt="Mentee"
                                                 className="w-full h-full object-cover"
-                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentee&backgroundColor=b6e3f4"
                                             />
                                         </div>
                                     </div>
@@ -414,14 +414,16 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="grid md:grid-cols-4 gap-12 mb-16">
                         <div className="col-span-2 space-y-6">
-                            <div className="flex items-center gap-2">
-                                <span className="material-icons-outlined text-primary text-3xl">
-                                    school
-                                </span>
-                                <span className="text-2xl font-extrabold text-slate-900 dark:text-white">
-                                    UniMate
-                                </span>
-                            </div>
+                            <Link href="/" className="flex items-center gap-2 group hover:opacity-80 transition-opacity">
+                                <Image
+                                    src="/unimate.png"
+                                    alt="UniMate"
+                                    width={36}
+                                    height={36}
+                                    className="rounded-full object-cover group-hover:rotate-12 transition-transform duration-500"
+                                />
+                                <span className="text-2xl font-extrabold text-slate-900 dark:text-white">UniMate</span>
+                            </Link>
                             <p className="text-slate-600 dark:text-slate-400 max-w-sm">
                                 Empowering the next generation of college students through
                                 authentic connections and peer mentorship.
