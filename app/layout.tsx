@@ -19,7 +19,7 @@ export default function RootLayout({
         <ClerkProvider>
             <html lang="en" suppressHydrationWarning className="scroll-smooth">
                 <head>
-                    {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+                    {/* eslint-disable @next/next/no-page-custom-font */}
                     <link
                         href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
                         rel="stylesheet"
@@ -28,6 +28,7 @@ export default function RootLayout({
                         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
                         rel="stylesheet"
                     />
+                    {/* eslint-enable @next/next/no-page-custom-font */}
                 </head>
                 <body className="font-sans antialiased transition-colors duration-300">
                     <ThemeProvider
