@@ -230,7 +230,7 @@ export default function ProfilePage() {
         setSaving(true);
         setSaveError(null);
 
-        if (!editForm.full_name?.trim() || !editForm.university?.trim() || !editForm.major?.trim() || !editForm.graduation_year?.trim() || !editForm.college_city?.trim() || !editForm.college_email?.trim() || !editForm.aadhaar_number?.trim() || !editForm.bio?.trim() || !editForm.github_url?.trim() || !editForm.linkedin_url?.trim() || (editForm.specializations?.length ?? 0) === 0 || (editForm.languages?.length ?? 0) === 0) {
+        if (!editForm.full_name?.trim() || !editForm.university?.trim() || !editForm.major?.trim() || !editForm.graduation_year?.trim() || !editForm.college_city?.trim() || !editForm.college_email?.trim() || !editForm.aadhaar_number?.trim() || !editForm.bio?.trim() || !editForm.github_url?.trim() || !editForm.linkedin_url?.trim() || (editForm.languages?.length ?? 0) === 0) {
             setSaveError("All fields are required. Please fill in all the details.");
             setSaving(false);
             return;
